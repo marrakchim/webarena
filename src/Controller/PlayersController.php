@@ -108,4 +108,26 @@ class PlayersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+
+    /*public function beforeFilter() {
+      parent::beforeFilter();
+      // Permet aux utilisateurs de s'enregistrer et de se déconnecter
+      $this->Auth->allow('add', 'logout');
+    }
+
+    public function login() {
+        if ($this->request->is('post')) {
+            if ($this->Auth->login()) {
+                return $this->redirect($this->Auth->redirectUrl());
+            } else {
+                $this->Flash->error(__("Invalid email address or password, try again !" ));
+            }
+        }
+    }
+
+    public function logout() {
+        return $this->redirect($this->Auth->logout());
+    }*/
 }

@@ -29,7 +29,20 @@ class ArenasController  extends AppController
 
     public function login()
     {
+        $this->loadModel('Players');
+        $player = $this->Players->newEntity();
+          if ($this->request->is('post')) {
+              $player = $this->Players->patchEntity($player, $this->request->data);
+              if ($this->Players->save($player)) {
+                  $this->Flash->success(__('The player has been saved.'));
 
+                  return $this->redirect(['action' => 'index']);
+              } else {
+                  $this->Flash->error(__('The player could not be saved. Please, try again.'));
+              }
+          }
+          $this->set(compact('player'));
+          $this->set('_serialize', ['player']);
     }
 
     public function fighter()
