@@ -1,1 +1,1 @@
-Bienvenu dans WebArena - Sight
+ Sight page
