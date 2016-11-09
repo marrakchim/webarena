@@ -52,11 +52,18 @@ class ArenasController  extends AppController
 
     public function sight()
     {
+<<<<<<< Updated upstream
 
+=======
+        $this->loadModel('Fighters');
+        
+        $this->set('fighters', $this->Fighters->findLastEvents());
+>>>>>>> Stashed changes
     }
 
     public function diary()
     {
+<<<<<<< Updated upstream
         //$this->set('Events', $this->Events->find('all'));
 
         //$query = $events->find('all');
@@ -67,6 +74,10 @@ class ArenasController  extends AppController
             'order' => array('Event.date DESC'), ));*/
 
         //$this->set('events', $query);
+=======
+        $this->loadModel('Events');
+        $this->set('events', $this->Events->findLastEvents());
+>>>>>>> Stashed changes
     }
 
 

@@ -68,4 +68,12 @@ class EventsTable extends Table
 
         return $validator;
     }
+    
+    public function findLastEvents()
+    {
+        return $query = $this->find('all', array(
+            'conditions' => array(
+                'Events.date BETWEEN NOW() -INTERVAL 1 DAY AND NOW()'),
+            'order' => array('Events.date DESC'), ));
+    }
 }
