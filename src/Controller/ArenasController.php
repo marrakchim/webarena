@@ -80,6 +80,6 @@ class ArenasController  extends AppController
 >>>>>>> Stashed changes
     }
 
-
+// Test
 
 }
