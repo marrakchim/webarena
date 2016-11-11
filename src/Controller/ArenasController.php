@@ -48,6 +48,7 @@ class ArenasController  extends AppController
               'Players.email' => $res['email']
             ]);
             $this->Flash->success(__('The player has been loaded.'));
+            return $this->redirect(['action' => 'index']);
           }else{
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
