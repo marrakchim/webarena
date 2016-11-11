@@ -29,20 +29,45 @@ class ArenasController  extends AppController
 
     public function login()
     {
-        $this->loadModel('Players');
-        $player = $this->Players->newEntity();
-          if ($this->request->is('post')) {
-              $player = $this->Players->patchEntity($player, $this->request->data);
-              if ($this->Players->save($player)) {
-                  $this->Flash->success(__('The player has been saved.'));
 
-                  return $this->redirect(['action' => 'index']);
-              } else {
-                  $this->Flash->error(__('The player could not be saved. Please, try again.'));
-              }
+      $this->set('title', 'Login');
+      $this->loadModel('Players');
+      $player = $this->Players->newEntity();
+
+      if($this->request->is('post')){
+
+        if (!isset($this->request->data['Confirmation'])){
+          $data= $this->request->data;
+          $res=$this->Players->find('all')->where(['Players.email' => $data['email']]);
+          $res = $res->first();
+          if($res['password'] == $data['password'] AND $res['email'] == $data['email']){
+            $session = $this->request->session();
+
+            $session->write([
+              'Players.id' => $res['id'] ,
+              'Players.email' => $res['email']
+            ]);
+            $this->Flash->success(__('The player has been loaded.'));
+          }else{
+              $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
+        }
+        else {
+          $player = $this->Players->newEntity();
+          $player = $this->Players->patchEntity($player, $this->request->data);
+          if ($this->Players->save($player)) {
+              $this->Flash->success(__('The player has been saved.'));
+
+              return $this->redirect(['action' => 'index']);
+          } else {
+              $this->Flash->error(__('The player could not be saved. Please, try again.'));
+          }
+
           $this->set(compact('player'));
           $this->set('_serialize', ['player']);
+
+        }
+      }
     }
 
     public function fighter()
@@ -52,18 +77,14 @@ class ArenasController  extends AppController
 
     public function sight()
     {
-<<<<<<< Updated upstream
 
-=======
         $this->loadModel('Fighters');
-        
+
         $this->set('fighters', $this->Fighters->findLastEvents());
->>>>>>> Stashed changes
     }
 
     public function diary()
     {
-<<<<<<< Updated upstream
         //$this->set('Events', $this->Events->find('all'));
 
         //$query = $events->find('all');
@@ -74,12 +95,8 @@ class ArenasController  extends AppController
             'order' => array('Event.date DESC'), ));*/
 
         //$this->set('events', $query);
-=======
         $this->loadModel('Events');
         $this->set('events', $this->Events->findLastEvents());
->>>>>>> Stashed changes
+
     }
-
-// Test
-
 }
