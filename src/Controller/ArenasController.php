@@ -48,7 +48,7 @@ class ArenasController  extends AppController
               'Players.email' => $res['email']
             ]);
             $this->Flash->success(__('The player has been loaded.'));
-            return $this->redirect(['action' => 'index']);
+            return $this->redirect(['controller'=>'Fighters', 'action' => 'index']);
           }else{
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
@@ -70,6 +70,18 @@ class ArenasController  extends AppController
         }
       }
     }
+
+    public function logout(){
+            if($this->request->session() !== null){
+                $this->request->session()->destroy();
+                $this->Flash->success(__('You have been disconected.'));
+                return $this->redirect([
+                    'controller' => 'arenas',
+                    'action' => 'login']);
+            }else{
+                $this->Flash->error(__('You could not be disconected. Please, try again.'));
+            }
+	}
 
     public function fighter()
     {

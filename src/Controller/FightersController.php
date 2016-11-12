@@ -18,7 +18,10 @@ class FightersController extends AppController
      */
     public function index()
     {
+        $this->loadModel('Fighters');
         $fighters = $this->paginate($this->Fighters);
+        $playerId = $this->request->session()->read('Players.id');
+        $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
 
         $this->set(compact('fighters'));
         $this->set('_serialize', ['fighters']);

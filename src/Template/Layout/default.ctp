@@ -42,8 +42,46 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
+              <li <?php if(null!==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
+                <?=  $this->Html->link(
+                  'Login',
+                  ['controller' => 'Arenas', 'action' => 'login']
+               ); ?>
+
+              </li>
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
+                <?=  $this->Html->link(
+                  'Home',
+                  ['controller' => 'Arenas', 'action' => 'index']
+               ); ?>
+
+              </li>
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                  <?=  $this->Html->link(
+                 'Arenas',
+                 ['controller' => 'Arenas', 'action' => 'sight']
+              ); ?>
+
+              </li >
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
+              <?=  $this->Html->link(
+                 'Fighters',
+                 ['controller'=>'Fighters', 'action' => 'index']
+              ); ?>
+
+              </li>
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                  <?=  $this->Html->link(
+                      'Actions diary',
+                      ['controller' => 'Arenas', 'action' => 'diary']
+                   ); ?>
+              </li>
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                  <?=  $this->Html->link(
+                 'Logout',
+                 ['controller' => 'Arenas', 'action' => 'logout']
+              ); ?>
+              </li>
             </ul>
         </div>
     </nav>
