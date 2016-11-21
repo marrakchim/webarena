@@ -68,7 +68,12 @@ class ArenasController  extends AppController
           if ($this->Players->save($player)) {
               $this->Flash->success(__('The player has been saved.'));
 
-              return $this->redirect(['action' => 'index']);
+              // ------------------------
+              //  Appel de la fonction pour créer un fighter à l'inscription
+              // ------------------------
+
+
+              return $this->redirect(['action' => 'login']);
           } else {
               $this->Flash->error(__('The player could not be saved. Please, try again.'));
           }
