@@ -32,6 +32,15 @@ class ArenasController  extends AppController
     public function login()
     {
 
+      $sessionUser = $this->request->session();
+      if($sessionUser->read("Players.id") != null){
+        $this->Flash->error(__('You are already connected.'));
+        return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
+
+      } else {
+        $this->render();
+      }
+
       $this->set('title', 'Login');
       $this->loadModel('Players');
       $player = $this->Players->newEntity();
