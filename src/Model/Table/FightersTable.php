@@ -131,4 +131,21 @@ class FightersTable extends Table
 
         return $rules;
     }
+    
+    public function createANewChampionFor($playerId, $championName)
+    {
+        $fighter = $this->newEntity();
+        
+        $fighter->player_id = $playerId;
+        $fighter->name = $championName;
+        $fighter->coordinate_x = rand(0,14);
+        $fighter->coordinate_y = rand(0,9);
+        $fighter->level = 0;
+        $fighter->xp = 0;
+        $fighter->skill_sight = 0;
+        $fighter->skill_health = 3;
+        $fighter->current_health = 3;
+            
+        return $this->save($fighter);
+    }
 }

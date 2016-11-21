@@ -99,7 +99,50 @@ class ArenasController  extends AppController
 
     public function fighter()
     {
+        $this->loadModel('Fighters');
+        $playerId = $this->request->session()->read('Players.id');
+        $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
 
+        $this->set(compact('fighters'));
+        $this->set('_serialize', ['fighters']);
+    }
+    
+    public function fighterAdd()
+    {
+        $this->loadModel('Fighters');
+        $fighter = $this->Fighters->newEntity();
+        
+        if ($this->request->is('post')) {
+            
+            $res=$this->Fighters->createANewChampionFor($this->request->session()->read('Players.id'),$this->request->data['name']);
+            
+            if ($res) {
+                $this->Flash->success(__('The fighter has been saved.'));
+                return $this->redirect(['action' => 'fighter']);
+            } else {
+                $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
+            }
+        }
+        $this->set(compact('fighter'));
+        $this->set('_serialize', ['fighter']);
+    }
+    
+    public function fighterView($fighterId)
+    {   
+        $this->loadModel('Fighters');
+        $fighter = $this->Fighters->get($fighterId);
+        
+        $this->set(compact('fighter'));
+        $this->set('_serialize', ['fighter']);
+    }
+    
+    public function fighterAvatar($fighterId)
+    {   
+        $this->loadModel('Fighters');
+        $fighter = $this->Fighters->get($fighterId);
+        
+        $this->set(compact('fighter'));
+        $this->set('_serialize', ['fighter']);
     }
 
     public function sight()

@@ -65,8 +65,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
               </li >
               <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
               <?=  $this->Html->link(
-                 'Fighters',
-                 ['controller'=>'Fighters', 'action' => 'index']
+                 'My fighters',
+                 ['controller' => 'Arenas', 'action' => 'fighter']
               ); ?>
 
               </li>
