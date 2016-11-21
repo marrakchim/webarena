@@ -6,6 +6,8 @@ use App\Controller\AppController;
 
 use Cake\ORM\FightersTable;
 
+use Cake\Utility\Hash;
+
 /**
 * Personal Controller
 * User personal interface
@@ -72,16 +74,16 @@ class ArenasController  extends AppController
     }
 
     public function logout(){
-            if($this->request->session() !== null){
-                $this->request->session()->destroy();
-                $this->Flash->success(__('You have been disconected.'));
-                return $this->redirect([
-                    'controller' => 'arenas',
-                    'action' => 'login']);
-            }else{
-                $this->Flash->error(__('You could not be disconected. Please, try again.'));
-            }
-	}
+      if($this->request->session() !== null){
+        $this->request->session()->destroy();
+        $this->Flash->success(__('You have been disconected.'));
+        return $this->redirect([
+          'controller' => 'arenas',
+          'action' => 'index']);
+      }else{
+        $this->Flash->error(__('You could not be disconected. Please, try again.'));
+      }
+	  }
 
     public function fighter()
     {
@@ -91,9 +93,35 @@ class ArenasController  extends AppController
     public function sight()
     {
 
+      if ($this->request->session()->read('FighterSelected.id') != null) {
         $this->loadModel('Fighters');
+        $fighters = $this->paginate($this->Fighters);
+        $playerId = $this->request->session()->read('Players.id');
+        $myFighter = $this->request->session()->read('Fighter');
+        $fighters = $this->Fighters->find('all')->where(['player_id !=' => $playerId]);
 
-        $this->set('fighters', $this->Fighters->findLastEvents());
+        $fightersAround = array();
+
+        foreach ($fighters as $fighter) {
+          $x = $fighter->coordinate_x;
+          $y = $fighter->coordinate_y;
+
+          if($x+$y > 4){
+            $fightersAround[] = $fighter;
+          }
+
+        }
+
+      }
+      else {
+        $this->Flash->error(__('You have to select a fighter to play.'));
+        return $this->redirect(['controller' => 'fighters', 'action' => 'index']);
+
+      }
+
+      $this->set(compact('fightersAround'));
+      $this->set('_serialize', ['fightersAround']);
+
     }
 
     public function diary()

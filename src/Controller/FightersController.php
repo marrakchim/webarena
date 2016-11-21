@@ -92,6 +92,20 @@ class FightersController extends AppController
         $this->set('_serialize', ['fighter']);
     }
 
+    public function selectFighter($id = null){
+
+      if($id != null) {
+        $session = $this->request->session();
+        $session->write(['FighterSelected.id' => $id ]);
+
+        $this->Flash->success(__('The fighter has been selected.'));
+        return $this->redirect(['controller' => 'arenas', 'action' => 'sight']);
+      } else {
+        $this->Flash->error(__('The fighter could not be selected. Please, try again.'));
+        return $this->redirect(['action' => 'index']);
+      }
+    }
+
     /**
      * Delete method
      *

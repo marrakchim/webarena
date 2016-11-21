@@ -7,9 +7,14 @@
     -- game description --
   </p>
   <br />
-  <?php echo $this->Html->link(
+  <?php
+    $session = $this->request->session();
+
+    if($this->request->session()->read('Players.id') == null){
+      echo $this->Html->link(
       'Let\'s Start !',
       '/Arenas/login',
       ['class' => 'button']);
+    }
    ?>
 </center>
