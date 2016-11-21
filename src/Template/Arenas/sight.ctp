@@ -20,8 +20,9 @@ foreach ($fightersAround as  $f)
           echo '<tr>';
           for($j=0;$j<10;$j++)
           {
-            if(isset($indexedFighters[$i][$j]))
-              //echo "<td> ".$indexedFighters[$i][$j]->name." </td>";
+            if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id")))
+              echo "<td> You </td>";
+            elseif(isset($indexedFighters[$i][$j]))
               echo "<td> X </td>";
             else
               echo "<td> O </td>";
@@ -32,13 +33,4 @@ foreach ($fightersAround as  $f)
 
       </tbody>
     </table>
-
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-        </ul>
-        <p><?= $this->Paginator->counter() ?></p>
-    </div>
 </div>

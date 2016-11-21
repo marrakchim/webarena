@@ -104,26 +104,25 @@ class ArenasController  extends AppController
 
     public function sight()
     {
-
-      if ($this->request->session()->read('FighterSelected.id') != null) {
+      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      if ($fighterSelectedId != null) {
         $this->loadModel('Fighters');
         $fighters = $this->paginate($this->Fighters);
         $playerId = $this->request->session()->read('Players.id');
-        $myFighter = $this->request->session()->read('Fighter');
-        $fighters = $this->Fighters->find('all')->where(['player_id !=' => $playerId]);
+        $fighters = $this->Fighters->find('all');
 
         $fightersAround = array();
-
         foreach ($fighters as $fighter) {
           $x = $fighter->coordinate_x;
           $y = $fighter->coordinate_y;
 
-          if($x+$y > 4){
+          $visible = false;
+
+          if(($x+$y > 4 && $fighter->player_id != $playerId) || ($fighter->id == $fighterSelectedId)){
             $fightersAround[] = $fighter;
           }
 
         }
-
       }
       else {
         $this->Flash->error(__('You have to select a fighter to play.'));

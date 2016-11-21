@@ -96,7 +96,13 @@ class FightersController extends AppController
 
       if($id != null) {
         $session = $this->request->session();
-        $session->write(['FighterSelected.id' => $id ]);
+
+        //$myFighter = $this->Fighters->find('all')->where(['id' => $id]);
+        //$myFighter = $this->Fighters->find('first', array('conditions' => array('Fighters.id' => $id)));
+
+        $session->write(['FighterSelected.id' => $id]);
+        //$session->write(['FighterSelected.x' => $myFighter->coordinate_x]);
+        //$session->write(['FighterSelected.y' => $myFighter->coordinate_y]);
 
         $this->Flash->success(__('The fighter has been selected.'));
         return $this->redirect(['controller' => 'arenas', 'action' => 'sight']);
