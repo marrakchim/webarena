@@ -148,4 +148,17 @@ class FightersTable extends Table
             
         return $this->save($fighter);
     }
+    
+    public function selectRandomFighter($playerId)
+    {
+        $resultsArray = $this->find()->where(['player_id' => $playerId])->toArray();
+                                 
+        if($resultsArray[0] == NULL) {
+            $fighter = createANewChampionFor($playerId,'MyFirstChampion');
+        } else {
+            $fighter = $resultsArray[0];
+        }
+        
+        return $fighter;
+    }
 }

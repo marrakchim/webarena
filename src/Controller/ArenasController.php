@@ -31,19 +31,23 @@ class ArenasController  extends AppController
 
     public function login()
     {
-      $sessionUser = $this->request->session();
-            if($sessionUser->read("Players.id") != null){
-              $this->Flash->error(__('You are already connected.'));
-              return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
+        $sessionUser = $this->request->session();
+        
+        if($sessionUser->read("Players.id") != null){
+            $this->Flash->error(__('You are already connected.'));
+            return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
 
-            } else {
-              $this->render();
-            }
-      $this->set('title', 'Login');
-      $this->loadModel('Players');
-      $player = $this->Players->newEntity();
+        } else {
+            $this->render();
+        }
+        
+        $this->set('title', 'Login');
+        $this->loadModel('Players');
+        $player = $this->Players->newEntity();
+        
+        $this->loadModel('Fighters');
 
-      if($this->request->is('post')){
+        if($this->request->is('post')){
 
         if (!isset($this->request->data['Confirmation'])){
           $data= $this->request->data;
@@ -57,7 +61,12 @@ class ArenasController  extends AppController
               'Players.email' => $res['email']
             ]);
             $this->Flash->success(__('The player has been loaded.'));
-            return $this->redirect(['controller'=>'Fighters', 'action' => 'index']);
+              
+            $selectedFighter = $this->Fighters->selectRandomFighter($res['id']);
+                
+            $session->write(['FighterSelected.id' => $selectedFighter->id]);
+              
+            return $this->redirect(['controller'=>'arenas', 'action' => 'sight']);
           }else{
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
@@ -102,8 +111,11 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $playerId = $this->request->session()->read('Players.id');
         $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
+        
+        $session = $this->request->session();
+        $selectedFighter = $session->read('FighterSelected.id');
 
-        $this->set(compact('fighters'));
+        $this->set(compact('fighters','selectedFighter'));
         $this->set('_serialize', ['fighters']);
     }
     
@@ -123,6 +135,7 @@ class ArenasController  extends AppController
                 $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
             }
         }
+        
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
@@ -141,40 +154,72 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
         
+        if ($this->request->is('post')) {
+            
+            $res=$this->Fighters->updateAvatar();
+            
+            if ($res) {
+                $this->Flash->success(__('The fighter has been saved.'));
+                return $this->redirect(['action' => 'fighter']);
+            } else {
+                $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
+            }
+        }
+        
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
+    }
+    
+    public function fighterSelect($id = null){
+
+        if($id != null) {
+            $session = $this->request->session();
+            
+            $session->write(['FighterSelected.id' => $id]);
+
+            $this->Flash->success(__('The fighter has been selected.'));
+            return $this->redirect(['controller' => 'arenas', 'action' => 'sight']);
+        } else {
+            $this->Flash->error(__('The fighter could not be selected. Please, try again.'));
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function sight()
     {
-      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      if ($fighterSelectedId != null) {
         $this->loadModel('Fighters');
-        $fighters = $this->paginate($this->Fighters);
-        $playerId = $this->request->session()->read('Players.id');
-        $fighters = $this->Fighters->find('all');
+        
+        $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      
+        if ($fighterSelectedId != null) {
+        
+            $fighters = $this->paginate($this->Fighters);
+            $playerId = $this->request->session()->read('Players.id');
+            $fighters = $this->Fighters->find('all');
 
-        $fightersAround = array();
-        foreach ($fighters as $fighter) {
-          $x = $fighter->coordinate_x;
-          $y = $fighter->coordinate_y;
+            $fightersAround = array();
+            
+            foreach ($fighters as $fighter) {
+                $x = $fighter->coordinate_x;
+                $y = $fighter->coordinate_y;
 
-          $visible = false;
+                $visible = false;
 
-          if(($x+$y > 4 && $fighter->player_id != $playerId) || ($fighter->id == $fighterSelectedId)){
-            $fightersAround[] = $fighter;
-          }
-
-        }
+                if(($x+$y > 4 && $fighter->player_id != $playerId) || ($fighter->id == $fighterSelectedId)){
+                    $fightersAround[] = $fighter;
+                }
+            }
       }
       else {
-        $this->Flash->error(__('You have to select a fighter to play.'));
-        return $this->redirect(['controller' => 'fighters', 'action' => 'index']);
-
+          $this->Flash->error(__('You have to select a fighter to play.'));
+          return $this->redirect(['controller' => 'fighters', 'action' => 'index']);
       }
+        
+        $session = $this->request->session();
+        $selectedFighter = $this->Fighters->get($session->read('FighterSelected.id'));
 
-      $this->set(compact('fightersAround'));
-      $this->set('_serialize', ['fightersAround']);
+        $this->set(compact('fightersAround','selectedFighter'));
+        $this->set('_serialize', ['fightersAround']);
 
     }
 

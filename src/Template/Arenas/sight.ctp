@@ -3,6 +3,8 @@
 </nav>
 <div class="fighters index large-9 medium-8 columns content">
     <h3><?= __('Fighters Around You !') ?></h3>
+    
+    <p>Your fighter is : <?= $selectedFighter->name; ?></p>
 <?php
 // genere une version indexee des objets
 $indexedFighters=array();

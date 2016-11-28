@@ -1,9 +1,17 @@
 <div class="fighters form large-9 medium-8 columns content">
-    <?= $this->Form->create($fighter) ?>
+    
     <fieldset>
-        <legend><?= __('Add a Fighter') ?></legend>
+        <legend><?= __('Edit Fighter Avatar') ?></legend>
         <?php
-            echo $this->Form->input('name');
+    
+            
+            
+            // add the type to the create-method
+            echo $this->Form->create($entity, ['type' => 'file']);
+
+            // add the avatar-input
+            echo $this->Form->input('avatar', ['type' => 'file']);
+            
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -30,7 +30,7 @@
                       <br />
                       <?= $this->Html->link(__('Edit'), ['action' => 'fighterAvatar', $fighter->id]) ?>
                       <br />
-                      <?= $this->Html->link(__('Select Fighter'), ['action' => 'fighterSelect', $fighter->id]) ?>
+                      <? if($selectedFighter == $fighter->id) { echo "Fighter Selected"; } else { echo $this->Html->link(__('Select Fighter'), ['action' => 'fighterSelect', $fighter->id]); } ?>
                   </td>
               </tr>
             </form>
