@@ -26,6 +26,7 @@
                   'url' => array('controller' => 'arenas', 'action' => 'moveLeft'))); ?>
         </td>
         <td>
+          <?= $this->Html->image('sword.png', ['width' => 50]); ?>
         </td>
         <td>
           <?= $this->Html->image("fd.jpg",
@@ -60,8 +61,6 @@ foreach ($fightersAround as  $f)
 
         <?php
         // construit le plateau en vérifiant pour chaque case le tableau indexe
-        // $i -> $x lignes
-        // $j -> $y colonnes
         for($i=0;$i<15;$i++)
         {
           echo '<tr>';
