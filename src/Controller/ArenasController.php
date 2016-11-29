@@ -32,7 +32,7 @@ class ArenasController  extends AppController
     public function login()
     {
         $sessionUser = $this->request->session();
-        
+
         if($sessionUser->read("Players.id") != null){
             $this->Flash->error(__('You are already connected.'));
             return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
@@ -40,11 +40,11 @@ class ArenasController  extends AppController
         } else {
             $this->render();
         }
-        
+
         $this->set('title', 'Login');
         $this->loadModel('Players');
         $player = $this->Players->newEntity();
-        
+
         $this->loadModel('Fighters');
 
         if($this->request->is('post')){
@@ -61,11 +61,11 @@ class ArenasController  extends AppController
               'Players.email' => $res['email']
             ]);
             $this->Flash->success(__('The player has been loaded.'));
-              
+
             $selectedFighter = $this->Fighters->selectRandomFighter($res['id']);
-                
+
             $session->write(['FighterSelected.id' => $selectedFighter->id]);
-              
+
             return $this->redirect(['controller'=>'arenas', 'action' => 'sight']);
           }else{
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
@@ -76,12 +76,6 @@ class ArenasController  extends AppController
           $player = $this->Players->patchEntity($player, $this->request->data);
           if ($this->Players->save($player)) {
               $this->Flash->success(__('The player has been saved.'));
-
-              // ------------------------
-              //  Appel de la fonction pour créer un fighter à l'inscription
-              // ------------------------
-
-
               return $this->redirect(['action' => 'login']);
           } else {
               $this->Flash->error(__('The player could not be saved. Please, try again.'));
@@ -111,23 +105,23 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $playerId = $this->request->session()->read('Players.id');
         $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
-        
+
         $session = $this->request->session();
         $selectedFighter = $session->read('FighterSelected.id');
 
         $this->set(compact('fighters','selectedFighter'));
         $this->set('_serialize', ['fighters']);
     }
-    
+
     public function fighterAdd()
     {
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->newEntity();
-        
+
         if ($this->request->is('post')) {
-            
+
             $res=$this->Fighters->createANewChampionFor($this->request->session()->read('Players.id'),$this->request->data['name']);
-            
+
             if ($res) {
                 $this->Flash->success(__('The fighter has been saved.'));
                 return $this->redirect(['action' => 'fighter']);
@@ -135,29 +129,29 @@ class ArenasController  extends AppController
                 $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
             }
         }
-        
+
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
-    
+
     public function fighterView($fighterId)
-    {   
+    {
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
-        
+
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
-    
+
     public function fighterAvatar($fighterId)
-    {   
+    {
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
-        
+
         if ($this->request->is('post')) {
-            
+
             $res=$this->Fighters->updateAvatar();
-            
+
             if ($res) {
                 $this->Flash->success(__('The fighter has been saved.'));
                 return $this->redirect(['action' => 'fighter']);
@@ -165,16 +159,16 @@ class ArenasController  extends AppController
                 $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
             }
         }
-        
+
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
-    
+
     public function fighterSelect($id = null){
 
         if($id != null) {
             $session = $this->request->session();
-            
+
             $session->write(['FighterSelected.id' => $id]);
 
             $this->Flash->success(__('The fighter has been selected.'));
@@ -188,24 +182,34 @@ class ArenasController  extends AppController
     public function sight()
     {
         $this->loadModel('Fighters');
-        
+
         $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      
+
         if ($fighterSelectedId != null) {
-        
+
             $fighters = $this->paginate($this->Fighters);
             $playerId = $this->request->session()->read('Players.id');
             $fighters = $this->Fighters->find('all');
+            $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
+            $fighterX = $myFighter->coordinate_x;
+            $fighterY = $myFighter->coordinate_y;
+            $fighterSight = $myFighter->skill_sight;
 
             $fightersAround = array();
-            
+
             foreach ($fighters as $fighter) {
                 $x = $fighter->coordinate_x;
                 $y = $fighter->coordinate_y;
 
-                $visible = false;
+                if(($fighterX + $fighterSight >= $x || $fighterX - $fighterSight <= $x) || ($fighterY + $fighterSight >= $y || $fighterY - $fighterSight <= $y)){
+                    $visible = true;
+                }
+                else {
+                    $visible = false;
+                }
+                //$visible = true;
 
-                if(($x+$y > 4 && $fighter->player_id != $playerId) || ($fighter->id == $fighterSelectedId)){
+                if(($visible && $fighter->player_id != $playerId) || ($fighter->id == $fighterSelectedId)){
                     $fightersAround[] = $fighter;
                 }
             }
@@ -214,7 +218,7 @@ class ArenasController  extends AppController
           $this->Flash->error(__('You have to select a fighter to play.'));
           return $this->redirect(['controller' => 'fighters', 'action' => 'index']);
       }
-        
+
         $session = $this->request->session();
         $selectedFighter = $this->Fighters->get($session->read('FighterSelected.id'));
 
