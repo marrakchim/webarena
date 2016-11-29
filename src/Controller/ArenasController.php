@@ -227,6 +227,77 @@ class ArenasController  extends AppController
 
     }
 
+    public function moveUp(){
+      $this->loadModel('Fighters');
+
+      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
+      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x - 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
+      if(!isset($canIGo) && ($myFighter->coordinate_x-1) >= 0){
+        $myFighter->coordinate_x = $myFighter->coordinate_x - 1 ;
+        $this->Fighters->save($myFighter);
+        $this->Flash->success(__('moveUp.'));
+      }
+      else {
+        $this->Flash->error(__('You are not allowed to go there.'));
+      }
+
+      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+    }
+
+    public function moveDown(){
+      $this->loadModel('Fighters');
+
+      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
+      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x + 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
+      if(!isset($canIGo) && ($myFighter->coordinate_x+1) <= 14){
+        $myFighter->coordinate_x = $myFighter->coordinate_x + 1 ;
+        $this->Fighters->save($myFighter);
+        $this->Flash->success(__('moveDown.'));
+      }
+      else {
+        $this->Flash->error(__('You are not allowed to go there.'));
+      }
+
+      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+    }
+
+    public function moveLeft(){
+      $this->loadModel('Fighters');
+
+      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
+      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y - 1])->first();
+      if(!isset($canIGo) && ($myFighter->coordinate_y-1) >= 0){
+        $myFighter->coordinate_y = $myFighter->coordinate_y - 1 ;
+        $this->Fighters->save($myFighter);
+        $this->Flash->success(__('moveLeft.'));
+      }
+      else {
+        $this->Flash->error(__('You are not allowed to go there.'));
+      }
+
+      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+    }
+
+    public function moveRight(){
+      $this->loadModel('Fighters');
+
+      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
+      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y + 1])->first();
+      if(!isset($canIGo) && ($myFighter->coordinate_y+1) <= 9){
+        $myFighter->coordinate_y = $myFighter->coordinate_y + 1 ;
+        $this->Fighters->save($myFighter);
+        $this->Flash->success(__('moveRight.'));
+      }
+      else {
+        $this->Flash->error(__('You are not allowed to go there.'));
+      }
+      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+    }
+
     public function diary()
     {
         //$this->set('Events', $this->Events->find('all'));
