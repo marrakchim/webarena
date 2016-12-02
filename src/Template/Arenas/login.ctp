@@ -2,8 +2,8 @@
     <fieldset>
         <legend><?= __('Log In') ?></legend>
         <?php
-            echo $this->Form->input('email', ['value'=>'']);
-            echo $this->Form->input('password', ['value'=>'']);
+            echo $this->Form->input('email', ['required'=>'true']);
+            echo $this->Form->input('password', ['required'=>'true']);
         ?>
     </fieldset>
     <center>
