@@ -29,10 +29,50 @@ class ArenasController  extends AppController
         }*/
     }
 
+    public function subscribe(){
+
+      //if the visitor is already logged in, redirect him to the home page
+      $sessionUser = $this->request->session();
+      if($sessionUser->read("Players.id") != null){
+          $this->Flash->error(__('You are already connected.'));
+          return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
+
+      } else {
+          $this->render();
+      }
+
+      $this->set('title', 'Login');
+      $this->loadModel('Players');
+      $player = $this->Players->newEntity();
+
+      $this->loadModel('Fighters');
+
+      if($this->request->is('post')){
+
+        if (isset($this->request->data['confirmation'])){
+
+          $player = $this->Players->newEntity();
+          $player = $this->Players->patchEntity($player, $this->request->data);
+          if ($this->Players->save($player)) {
+              $this->Fighters->createANewChampionFor($player->id,'Aragorn');
+              $this->Flash->success(__('The player has been saved.'));
+              return $this->redirect(['action' => 'login']);
+          } else {
+              $this->Flash->error(__('The player could not be saved. Please, try again.'));
+          }
+
+          $this->set(compact('player'));
+          $this->set('_serialize', ['player']);
+
+        }
+    }
+
+    }
+
     public function login()
     {
+        //if the visitor is already logged in, redirect him to the home page
         $sessionUser = $this->request->session();
-
         if($sessionUser->read("Players.id") != null){
             $this->Flash->error(__('You are already connected.'));
             return $this->redirect(['controller'=>'arenas', 'action' => 'index']);
@@ -49,7 +89,7 @@ class ArenasController  extends AppController
 
         if($this->request->is('post')){
 
-        if (!isset($this->request->data['Confirmation'])){
+        if (isset($this->request->data['password'])){
           $data= $this->request->data;
           $res=$this->Players->find('all')->where(['Players.email' => $data['email']]);
           $res = $res->first();
@@ -70,20 +110,6 @@ class ArenasController  extends AppController
           }else{
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
-        }
-        else {
-          $player = $this->Players->newEntity();
-          $player = $this->Players->patchEntity($player, $this->request->data);
-          if ($this->Players->save($player)) {
-              $this->Flash->success(__('The player has been saved.'));
-              return $this->redirect(['action' => 'login']);
-          } else {
-              $this->Flash->error(__('The player could not be saved. Please, try again.'));
-          }
-
-          $this->set(compact('player'));
-          $this->set('_serialize', ['player']);
-
         }
       }
     }
