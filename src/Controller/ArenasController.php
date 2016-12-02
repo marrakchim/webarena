@@ -8,6 +8,8 @@ use Cake\ORM\FightersTable;
 
 use Cake\Utility\Hash;
 
+use cake\Utility\Security;
+
 /**
 * Personal Controller
 * User personal interface
@@ -53,8 +55,9 @@ class ArenasController  extends AppController
 
           $player = $this->Players->newEntity();
           $data=$this->request->data;
-          if($data['password']==$data['confirmation']){
+        // if($data['password']==$data['confirmation']){
             $player = $this->Players->patchEntity($player, $this->request->data);
+            $player->password =Security::hash($data['password']);
             if ($this->Players->save($player)) {
                 $this->Fighters->createANewChampionFor($player->id,'Aragorn');
                 $this->Flash->success(__('The player has been saved.'));
@@ -62,10 +65,9 @@ class ArenasController  extends AppController
             } else {
                 $this->Flash->error(__('The player could not be saved. Please, try again.'));
             }
-          }else{
-            $this->Flash->error(__('Check your password and try again'));
-          }
-
+        //  }else{
+          //  $this->Flash->error(__('Check your password and try again'));
+        //  }
 
           $this->set(compact('player'));
           $this->set('_serialize', ['player']);
@@ -99,7 +101,7 @@ class ArenasController  extends AppController
           $data= $this->request->data;
           $res=$this->Players->find('all')->where(['Players.email' => $data['email']]);
           $res = $res->first();
-          if($res['password'] == $data['password'] AND $res['email'] == $data['email']){
+          if($res['password'] == Security::hash($data['password']) AND $res['email'] == $data['email']){
             $session = $this->request->session();
 
             $session->write([
