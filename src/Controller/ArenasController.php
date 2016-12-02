@@ -52,14 +52,20 @@ class ArenasController  extends AppController
         if (isset($this->request->data['confirmation'])){
 
           $player = $this->Players->newEntity();
-          $player = $this->Players->patchEntity($player, $this->request->data);
-          if ($this->Players->save($player)) {
-              $this->Fighters->createANewChampionFor($player->id,'Aragorn');
-              $this->Flash->success(__('The player has been saved.'));
-              return $this->redirect(['action' => 'login']);
-          } else {
-              $this->Flash->error(__('The player could not be saved. Please, try again.'));
+          $data=$this->request->data;
+          if($data['password']==$data['confirmation']){
+            $player = $this->Players->patchEntity($player, $this->request->data);
+            if ($this->Players->save($player)) {
+                $this->Fighters->createANewChampionFor($player->id,'Aragorn');
+                $this->Flash->success(__('The player has been saved.'));
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error(__('The player could not be saved. Please, try again.'));
+            }
+          }else{
+            $this->Flash->error(__('Check your password and try again'));
           }
+
 
           $this->set(compact('player'));
           $this->set('_serialize', ['player']);
