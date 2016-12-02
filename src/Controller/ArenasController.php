@@ -55,7 +55,7 @@ class ArenasController  extends AppController
 
           $player = $this->Players->newEntity();
           $data=$this->request->data;
-        // if($data['password']==$data['confirmation']){
+         if($data['password']==$data['confirmation']){
             $player = $this->Players->patchEntity($player, $this->request->data);
             $player->password =Security::hash($data['password']);
             if ($this->Players->save($player)) {
@@ -65,9 +65,9 @@ class ArenasController  extends AppController
             } else {
                 $this->Flash->error(__('The player could not be saved. Please, try again.'));
             }
-        //  }else{
-          //  $this->Flash->error(__('Check your password and try again'));
-        //  }
+          }else{
+          $this->Flash->error(__('Check your password and try again'));
+          }
 
           $this->set(compact('player'));
           $this->set('_serialize', ['player']);
@@ -450,4 +450,36 @@ class ArenasController  extends AppController
         $this->set('events', $this->Events->findLastEvents());
 
     }
+
+    public function guildCreate()
+    {
+      $this->loadModel('Guilds');
+      $guildCreate = $this->Guilds->newEntity();
+            if ($this->request->is('post')) {
+                $guildCreate = $this->Guilds->patchEntity($guildCreate, $this->request->data);
+                if ($this->Guilds->save($guildCreate)) {
+                    $this->Flash->success(__("La nouvelle guild a été sauvegardé."));
+                    return $this->redirect(['action' => 'guildCreate']);
+                }
+                $this->Flash->error(__("Impossible de créer la guild."));
+            }
+            $this->set(compact('guildCreate'));
+            $this->set('_serialize', ['guildCreate']);
+      }
+
+      public function guildEvent()
+      {
+        $this->loadModel('Guilds');
+        $guildEvent = $this->Guilds->newEntity();
+              if ($this->request->is('post')) {
+                  $guildEvent = $this->Guilds->patchEntity($guildEvent, $this->request->data);
+                  if ($this->Guilds->save($guildEvent)) {
+                      $this->Flash->success(__("Le nouvel évènement a été sauvegardé."));
+                      return $this->redirect(['action' => 'guildEvent']);
+                  }
+                  $this->Flash->error(__("Impossible de créer l'évènement."));
+              }
+              $this->set(compact('guildCreate'));
+              $this->set('_serialize', ['guildCreate']);
+        }
 }
