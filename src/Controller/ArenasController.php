@@ -10,6 +10,7 @@ use Cake\Utility\Hash;
 
 use Cake\I18n\Time;
 
+use cake\Utility\Security;
 
 /**
 * Personal Controller
@@ -55,13 +56,19 @@ class ArenasController  extends AppController
         if (isset($this->request->data['confirmation'])){
 
           $player = $this->Players->newEntity();
-          $player = $this->Players->patchEntity($player, $this->request->data);
-          if ($this->Players->save($player)) {
-              $this->Fighters->createANewChampionFor($player->id,'Aragorn');
-              $this->Flash->success(__('The player has been saved.'));
-              return $this->redirect(['action' => 'login']);
-          } else {
-              $this->Flash->error(__('The player could not be saved. Please, try again.'));
+          $data=$this->request->data;
+         if($data['password']==$data['confirmation']){
+            $player = $this->Players->patchEntity($player, $this->request->data);
+            $player->password =Security::hash($data['password']);
+            if ($this->Players->save($player)) {
+                $this->Fighters->createANewChampionFor($player->id,'Aragorn');
+                $this->Flash->success(__('The player has been saved.'));
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error(__('The player could not be saved. Please, try again.'));
+            }
+          }else{
+          $this->Flash->error(__('Check your password and try again'));
           }
 
           $this->set(compact('player'));
@@ -96,7 +103,7 @@ class ArenasController  extends AppController
           $data= $this->request->data;
           $res=$this->Players->find('all')->where(['Players.email' => $data['email']]);
           $res = $res->first();
-          if($res['password'] == $data['password'] AND $res['email'] == $data['email']){
+          if($res['password'] == Security::hash($data['password']) AND $res['email'] == $data['email']){
             $session = $this->request->session();
 
             $session->write([
@@ -197,7 +204,7 @@ class ArenasController  extends AppController
 
         if ($this->request->is('post')) {
 
-            $res=$this->Fighters->createANewChampionFor($this->request->session()->read('Players.id'),$this->request->data['name']);
+            $res = $this->Fighters->createANewChampionFor($this->request->session()->read('Players.id'),$this->request->data['name']);
 
             if ($res) {
                 $this->Flash->success(__('The fighter has been saved.'));
@@ -259,6 +266,7 @@ class ArenasController  extends AppController
     public function sight()
     {
         $this->loadModel('Fighters');
+        $this->loadModel('Guilds');
 
         $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
 
@@ -295,10 +303,14 @@ class ArenasController  extends AppController
           return $this->redirect(['controller' => 'fighters', 'action' => 'index']);
       }
 
-        $session = $this->request->session();
-        $selectedFighter = $this->Fighters->get($session->read('FighterSelected.id'));
+        $selectedFighter = $this->Fighters->get($fighterSelectedId);
+        if($selectedFighter->guild_id) {
+            $selectedGuild = $this->Guilds->get($selectedFighter->guild_id);
+        } else {
+            $selectedGuild = null;
+        }
 
-        $this->set(compact('fightersAround','selectedFighter'));
+        $this->set(compact('fightersAround','selectedFighter','selectedGuild'));
         $this->set('_serialize', ['fightersAround']);
 
     }
@@ -492,5 +504,120 @@ class ArenasController  extends AppController
         $this->loadModel('Events');
         $this->set('events', $this->Events->findLastEvents());
 
+    }
+
+    public function guild()
+    {
+        $this->loadModel('Guilds');
+        $guilds = $this->Guilds->find('all');
+
+        $session = $this->request->session();
+        $selectedFighterId = $session->read('FighterSelected.id');
+
+        $this->loadModel('Fighters');
+        $selectedFighter = $this->Fighters->get($selectedFighterId);
+
+        $fighterGuild = $selectedFighter->guild_id;
+
+        $this->set(compact('guilds','fighterGuild'));
+        $this->set('_serialize', ['guilds']);
+    }
+
+    public function guildView($guildId)
+    {
+        $this->loadModel('Guilds');
+        $guild = $this->Guilds->get($guildId);
+
+        $this->loadModel('Fighters');
+        $fighters = $this->Fighters->find('all')->where(['guild_id' => $guildId]);
+
+        $session = $this->request->session();
+        $selectedFighterId = $session->read('FighterSelected.id');
+        $selectedFighter = $this->Fighters->get($selectedFighterId);
+
+        $fighterInGuild = false;
+        if($selectedFighter->guild_id == $guild->id) {
+            $fighterInGuild = true;
+        }
+
+        $this->set(compact('guild','fighters','selectedFighterId','fighterInGuild'));
+        $this->set('_serialize', ['guild']);
+        $this->set('_serialize', ['fighters']);
+    }
+
+    public function guildJoin($guildId = null){
+
+        if($guildId != null) {
+
+            $this->loadModel('Fighters');
+            $session = $this->request->session();
+            $this->Fighters->editFighterGuild($session->read('FighterSelected.id'), $guildId);
+
+            $this->Flash->success(__('The fighter joined the guild.'));
+            return $this->redirect(['action' => 'guildView', $guildId]);
+        } else {
+            $this->Flash->error(__('The fighter could not join the guild. Please, try again.'));
+            return $this->redirect(['action' => 'guild']);
+        }
+    }
+
+    public function guildQuit($guildId = null){
+
+        if($guildId != null) {
+
+            $this->loadModel('Fighters');
+            $session = $this->request->session();
+            $this->Fighters->editFighterGuild($session->read('FighterSelected.id'), null);
+
+            $this->Flash->success(__('The fighter quitted the guild.'));
+            return $this->redirect(['action' => 'guild']);
+        } else {
+            $this->Flash->error(__('The fighter could not quit the guild. Please, try again.'));
+            return $this->redirect(['action' => 'guild']);
+        }
+    }
+
+    public function guildCreate()
+    {
+        $this->loadModel('Guilds');
+        $guildCreate = $this->Guilds->newEntity();
+
+            if ($this->request->is('post')) {
+
+                $guildCreate = $this->Guilds->patchEntity($guildCreate, $this->request->data);
+
+                if ($this->Guilds->save($guildCreate)) {
+
+                    $this->Flash->success(__("La nouvelle guild a été sauvegardé."));
+                    return $this->redirect(['action' => 'guild']);
+                }
+
+                $this->Flash->error(__("Impossible de créer la guild."));
+            }
+
+        $this->set(compact('guildCreate'));
+        $this->set('_serialize', ['guildCreate']);
+    }
+
+    public function guildEvent()
+    {
+        $this->loadModel('Guilds');
+        $guildEvent = $this->Guilds->newEntity();
+
+            if ($this->request->is('post')) {
+
+                $guildEvent = $this->Guilds->patchEntity($guildEvent, $this->request->data);
+
+                if ($this->Guilds->save($guildEvent)) {
+
+                    $this->Flash->success(__("Le nouvel évènement a été sauvegardé."));
+                    return $this->redirect(['action' => 'guild']);
+                }
+
+                $this->Flash->error(__("Impossible de créer l'évènement."));
+            }
+
+        $this->set(compact('guildCreate'));
+        $this->set('_serialize', ['guildCreate']);
     }
 }

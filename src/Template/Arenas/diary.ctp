@@ -1,10 +1,8 @@
-<head><?php $this->assign('title', 'Diary');?></head>
-
-<h2>Diary</h2>
-
-<p>Events in sight less than 24 hours</p>
-
-<div>
+<div class="fighters index large-9 medium-8 columns content">
+    <h3>Diary</h3>
+    
+    <p>Events in sight less than 24 hours</p>
+    
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

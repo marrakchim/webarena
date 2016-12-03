@@ -5,6 +5,8 @@
     <h3><?= __('Fighters Around You !') ?></h3>
 
     <p>Your fighter is : <?= $selectedFighter->name; ?></p>
+    <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;} else {echo "Your fighter does not have a guild.";} ?></p>
+    
     <table class="arrow">
       <tr>
         <td>

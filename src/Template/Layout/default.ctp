@@ -77,6 +77,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
               ); ?>
 
               </li>
+              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
+              <?=  $this->Html->link(
+                 'Guilds',
+                 ['controller' => 'Arenas', 'action' => 'guild']
+              ); ?>
+
+              </li>
               <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
                   <?=  $this->Html->link(
                       'Actions diary',
