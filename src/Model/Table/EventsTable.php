@@ -6,6 +6,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Cake\I18n\Time;
+
 /**
  * Events Model
  *
@@ -75,5 +77,19 @@ class EventsTable extends Table
             'conditions' => array(
                 'Events.date BETWEEN NOW() -INTERVAL 1 DAY AND NOW()'),
             'order' => array('Events.date DESC'), ));
+    }
+    
+    public function addNewEvent($eventName, $coord_x, $coord_y)
+    {
+        $event = $this->newEntity();
+        
+        $event->name = $eventName;
+        
+        $event->date = Time::now();
+        
+        $event->coordinate_x = $coord_x;
+        $event->coordinate_y = $coord_y;
+            
+        $this->save($event);
     }
 }

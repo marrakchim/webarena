@@ -1,7 +1,9 @@
 <div class="fighters index large-9 medium-8 columns content">
     <h3>Guilds</h3>
     
-    <?= $this->Html->link(__('New Guild'), ['action' => 'guildCreate']) ?>
+    <ul>
+        <li><?= $this->Html->link(__('Create a new Guild'), ['action' => 'guildCreate']) ?></li>
+    </ul>
     
     <table cellpadding="0" cellspacing="0">
         <thead>

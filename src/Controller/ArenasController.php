@@ -139,19 +139,27 @@ class ArenasController  extends AppController
 	  }
 
     public function chat(){
-      $this->loadModel('Messages');
-      $this->loadModel('Fighters');
-      $session = $this->request->session();
-      $selectedFighter = $session->read('FighterSelected.id');
+        
+        $this->loadModel('Messages');
+        $this->loadModel('Fighters');
+        
+        $session = $this->request->session();
+        $selectedFighter = $session->read('FighterSelected.id');
 
-      $myMessage = $this->Messages->find('all')->where(['fighter_id' => $selectedFighter]);
+        $myMessage = $this->Messages->find('all')->where(['fighter_id' => $selectedFighter]);
+        $myMessageSent = $this->Messages->find('all')->where(['fighter_id_from' => $selectedFighter]);
 
-      foreach($myMessage as $message){
-        $fighter = $this->Fighters->find()->where(['id' => $message->fighter_id_from])->first();
-        $message['from'] = $fighter->name ;
-      }
+        foreach($myMessage as $message){
+            $fighter = $this->Fighters->get($message->fighter_id_from);
+            $message['from'] = $fighter->name ;
+        }
 
-      $this->set(compact('myMessage'));
+        foreach($myMessageSent as $message){
+            $fighter = $this->Fighters->get($message->fighter_id);
+            $message['to'] = $fighter->name ;
+        }
+
+        $this->set(compact('myMessage','myMessageSent'));
     }
 
     public function newMessage(){
@@ -184,6 +192,23 @@ class ArenasController  extends AppController
         }
       }
       $this->set(compact('allFighters', 'message'));
+    }
+    
+    public function yell()
+    {
+        $this->loadModel('Fighters');
+        $this->loadModel('Events');
+  
+        if ($this->request->is('post')) {
+
+            $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+            $myFighter = $this->Fighters->get($fighterSelectedId);
+
+            $this->Events->addNewEvent($this->request->data['message'], $myFighter->coordinate_x, $myFighter->coordinate_y);
+
+            $this->Flash->success(__("New yell event saved."));
+            return $this->redirect(['action' => 'diary']);
+        }
     }
 
     public function fighter()
@@ -316,6 +341,7 @@ class ArenasController  extends AppController
 
     public function moveUp(){
       $this->loadModel('Fighters');
+      $this->loadModel('Events');
 
       $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
       $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
@@ -331,15 +357,20 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
+              
+            $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
         else {
-          $this->Flash->error(__('Fail !'));
+            $this->Flash->error(__('Fail !'));
+            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
         }
       }
       if(!isset($canIGo) && ($myFighter->coordinate_x-1) >= 0){
@@ -356,6 +387,7 @@ class ArenasController  extends AppController
 
     public function moveDown(){
       $this->loadModel('Fighters');
+        $this->loadModel('Events');
 
       $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
       $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
@@ -371,15 +403,20 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
         else {
           $this->Flash->error(__('Fail !'));
+            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
         }
       }
       if(!isset($canIGo) && ($myFighter->coordinate_x+1) <= 14){
@@ -396,6 +433,7 @@ class ArenasController  extends AppController
 
     public function moveLeft(){
       $this->loadModel('Fighters');
+        $this->loadModel('Events');
 
       $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
       $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
@@ -411,15 +449,20 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
         else {
           $this->Flash->error(__('Fail !'));
+            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
         }
       }
       if(!isset($canIGo) && ($myFighter->coordinate_y-1) >= 0){
@@ -435,6 +478,7 @@ class ArenasController  extends AppController
 
     public function moveRight(){
       $this->loadModel('Fighters');
+        $this->loadModel('Events');
 
       $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
       $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
@@ -450,15 +494,20 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
+              
+              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
         else {
           $this->Flash->error(__('Fail !'));
+            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
         }
       }
       elseif(!isset($canIGo) && ($myFighter->coordinate_y+1) <= 9){
@@ -592,28 +641,6 @@ class ArenasController  extends AppController
                 }
 
                 $this->Flash->error(__("Impossible de créer la guild."));
-            }
-
-        $this->set(compact('guildCreate'));
-        $this->set('_serialize', ['guildCreate']);
-    }
-
-    public function guildEvent()
-    {
-        $this->loadModel('Guilds');
-        $guildEvent = $this->Guilds->newEntity();
-
-            if ($this->request->is('post')) {
-
-                $guildEvent = $this->Guilds->patchEntity($guildEvent, $this->request->data);
-
-                if ($this->Guilds->save($guildEvent)) {
-
-                    $this->Flash->success(__("Le nouvel évènement a été sauvegardé."));
-                    return $this->redirect(['action' => 'guild']);
-                }
-
-                $this->Flash->error(__("Impossible de créer l'évènement."));
             }
 
         $this->set(compact('guildCreate'));

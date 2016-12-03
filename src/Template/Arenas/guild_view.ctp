@@ -1,7 +1,7 @@
 <div class="fighters form large-9 medium-8 columns content">
     <h3>Fighters of the guild : <?= $guild->name ?></h3>
     
-    <p><? if(!$fighterInGuild) { echo $this->Html->link(__('Join Guild'), ['action' => 'guildjoin', $guild->id]); } ?></p>
+    <p><? if(!$fighterInGuild) { echo $this->Html->link(__('Join Guild'), ['action' => 'guildjoin', $guild->id]); } else { echo $this->Html->link(__('Quit Guild'), ['action' => 'guildQuit', $guild->id]); } ?></p>
     
     <table cellpadding="0" cellspacing="0">
         <thead>

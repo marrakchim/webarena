@@ -142,7 +142,7 @@ class FightersTable extends Table
         $fighter->coordinate_y = rand(0,9);
         $fighter->level = 0;
         $fighter->xp = 0;
-        $fighter->skill_sight = 0;
+        $fighter->skill_sight = 2;
         $fighter->skill_health = 3;
         $fighter->current_health = 3;
             
