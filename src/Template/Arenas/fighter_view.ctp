@@ -1,6 +1,8 @@
 <div class="fighters form large-9 medium-8 columns content">
     <h3>Details of my fighter</h3>
     
+    <?= $this->Html->link(__('Edit my fighter avatar'), ['action' => 'fighterAvatar', $fighter->id]) ?>
+    
     <div><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$fighter->id.'.jpg', ['alt' => 'Avatar']); } else{ echo $this->Html->image('avatars/default.jpg', ['alt' => 'Avatar']); } ?></div>
     
     <ul>

@@ -168,4 +168,13 @@ class FightersTable extends Table
         $fighter->guild_id = $guildId;
         $this->save($fighter);
     }
+    
+    public function updateAvatar($fighterId)
+    {
+        $target_path = WWW_ROOT .'/img/avatars/'. $this->request->data('url.name');
+        move_uploaded_file($this->request->data('url.tmp_name'), $target_path);
+        
+        return true;
+    }
+
 }

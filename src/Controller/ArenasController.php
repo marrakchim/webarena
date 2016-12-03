@@ -12,6 +12,8 @@ use Cake\I18n\Time;
 
 use cake\Utility\Security;
 
+use Cake\Filesystem\Folder;
+
 /**
 * Personal Controller
 * User personal interface
@@ -233,15 +235,12 @@ class ArenasController  extends AppController
         $fighter = $this->Fighters->get($fighterId);
 
         if ($this->request->is('post')) {
+            
+            $target_path = WWW_ROOT .'/img/avatars/'. $fighterId . '.jpg';
+            move_uploaded_file($this->request->data('url.tmp_name'), $target_path);
 
-            $res=$this->Fighters->updateAvatar();
-
-            if ($res) {
-                $this->Flash->success(__('The fighter has been saved.'));
-                return $this->redirect(['action' => 'fighter']);
-            } else {
-                $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
-            }
+            $this->Flash->success(__('The fighter avatar has been saved.'));
+            return $this->redirect(['action' => 'fighterView', $fighterId]);
         }
 
         $this->set(compact('fighter'));

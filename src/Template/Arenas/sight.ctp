@@ -4,6 +4,7 @@
 <div class="fighters index large-9 medium-8 columns content">
     <h3><?= __('Fighters Around You !') ?></h3>
 
+    <p><? if(file_exists(WWW_ROOT .'/img/avatars/'.$selectedFighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$selectedFighter->id.'.jpg', ['alt' => 'Avatar']); } else{ echo $this->Html->image('avatars/default.jpg', ['alt' => 'Avatar']); } ?></p>
     <p>Your fighter is : <?= $selectedFighter->name; ?></p>
     <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;} else {echo "Your fighter does not have a guild.";} ?></p>
     

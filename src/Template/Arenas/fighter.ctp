@@ -6,6 +6,7 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
+                <th>Avatar</th>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('level') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('xp') ?></th>
@@ -19,6 +20,7 @@
             <?php foreach ($fighters as $fighter): ?>
             <form>
               <tr>
+                  <td><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$fighter->id.'.jpg', ['alt' => 'Avatar']); } else{ echo $this->Html->image('avatars/default.jpg', ['alt' => 'Avatar']); } ?></td>
                   <td><?= h($fighter->name) ?></td>
                   <td><?= $this->Number->format($fighter->level) ?></td>
                   <td><?= $this->Number->format($fighter->xp) ?></td>
@@ -28,7 +30,7 @@
                   <td class="actions">
                       <?= $this->Html->link(__('View'), ['action' => 'fighterView', $fighter->id]) ?>
                       <br />
-                      <?= $this->Html->link(__('Edit'), ['action' => 'fighterAvatar', $fighter->id]) ?>
+                      <?= $this->Html->link(__('Edit Avatar'), ['action' => 'fighterAvatar', $fighter->id]) ?>
                       <br />
                       <? if($selectedFighter == $fighter->id) { echo "Fighter Selected"; } else { echo $this->Html->link(__('Select Fighter'), ['action' => 'fighterSelect', $fighter->id]); } ?>
                   </td>
