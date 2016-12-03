@@ -161,4 +161,11 @@ class FightersTable extends Table
         
         return $fighter;
     }
+    
+    public function editFighterGuild($fighterId, $guildId)
+    {
+        $fighter = $this->get($fighterId);     
+        $fighter->guild_id = $guildId;
+        $this->save($fighter);
+    }
 }
