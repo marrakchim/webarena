@@ -1,0 +1,79 @@
+body{
+  background-color:	#f2f2f2;
+  font-family: 'roboto-light';
+}
+
+nav{
+  background-color: #e6e6e6!important;
+}
+
+a{
+  text-decoration:none;
+}
+
+a:hover{
+  text-decoration:none;
+}
+
+.arrow{
+  margin:40px;
+  width:150px;
+  height:150px;
+}
+
+.margin-top-20p{
+  margin-top:20%;
+}
+
+a.game-title{
+  font-family: 'RINGBEARER';
+  color:#5b2b06!important;
+  font-size:32px;
+}
+
+.inline-info{
+  display:flex;
+  align-items: center;
+  justify-content: space-around;
+  padding:20px;
+}
+
+.aligned{
+  height:100%:
+}
+
+.game-description{
+  margin-left: 150px;
+  margin-right: 150px;
+  padding:100px;
+  text-align: center;
+  font-family: 'hack';
+  font-size: 16px;
+}
+
+.game-description h3{
+  padding-bottom:25px;
+}
+
+.pixel-button{
+  font-family:'pixeled';
+  color:#8B0000!important;
+}
+
+.pixel-button:hover{
+  font-weight:bolder;
+  color:#5b2b06;
+}
+
+.map{
+  height:675px;
+  width:450px;
+}
+
+td.case{
+  width:30px!important;
+  height:30px!important;
+  padding:0!important;
+  background-color:	#e6e6e6;
+  text-align: center;
+}

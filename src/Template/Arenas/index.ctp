@@ -1,20 +1,30 @@
+
 <center>
-  <h1>Welcome into the game WebArena, <?php echo $myname;?></h1>
-  <br />
-  <h4>Game Description</h4>
-  <br />
-  <p>
-    -- game description --
-  </p>
-  <br />
+  <div><? echo $this->Html->image('welcome.png', ['alt' => 'Welcome']);
+ ?></div>
+
+<div class='game-description well'>
+  <h3><span class="glyphicons glyphicons-gamepad"></span>ENTER THE FAMOUS WEBARENA!</h3>
+  <p>Create your fighters and let them  </p>
+  <p>fight your opponents!</p>
+  <p>Attack the other fighters and gain experience</p>
+  <p>to expand your view and level up!</p>
+<div>
+
   <?php
     $session = $this->request->session();
 
-    if($this->request->session()->read('Players.id') == null){
+    if($this->request->session()->read('Players.id') != null){
       echo $this->Html->link(
-      'Let\'s Start !',
+      'START ',
+      '/Arenas/sight',
+      ['class' => 'pixel-button']);
+    }
+    else{
+      echo $this->Html->link(
+      'LOGIN',
       '/Arenas/login',
-      ['class' => 'button']);
+      ['class' => 'pixel-button']);
     }
    ?>
 </center>

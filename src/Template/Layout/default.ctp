@@ -26,79 +26,80 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('bootstrap.min') ?>
+    <?= $this->Html->script(['bootstrap.min', 'jquery-3.1.1.min']);?>
+    <?= $this->Html->css('mystyle');  ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        <ul class="nav navbar-nav navbar-left">
+          <li>
+            <? echo $this->Html->image('logo.png', ['alt' => 'logo']);?>
+          </li>
+          <li class="">
+              <a href="" class='game-title'>webarena</a>
+          </li>
         </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-              <li <?php if(null!==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
-                <?=  $this->Html->link(
-                  'Login',
-                  ['controller' => 'Arenas', 'action' => 'login']
-               ); ?>
+        <ul class="nav navbar-nav navbar-right">
 
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
-                <?=  $this->Html->link(
-                  'Home',
-                  ['controller' => 'Arenas', 'action' => 'index']
-               ); ?>
-
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
-                <?=  $this->Html->link(
-                  'Chat',
-                  ['controller' => 'Arenas', 'action' => 'chat']
-               ); ?>
-
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                  <?=  $this->Html->link(
-                 'Arenas',
-                 ['controller' => 'Arenas', 'action' => 'sight']
-              ); ?>
-
-              </li >
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
+            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
               <?=  $this->Html->link(
-                 'My fighters',
-                 ['controller' => 'Arenas', 'action' => 'fighter']
-              ); ?>
+                'Home',
+                ['controller' => 'Arenas', 'action' => 'index']
+             ); ?>
+            </li>
+            </li>
+            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                <?=  $this->Html->link(
+               'Arenas',
+               ['controller' => 'Arenas', 'action' => 'sight']
+            ); ?>
 
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
-              <?=  $this->Html->link(
-                 'Guilds',
-                 ['controller' => 'Arenas', 'action' => 'guild']
-              ); ?>
+            </li >
+            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
+            <?=  $this->Html->link(
+               'My fighters',
+               ['controller' => 'Arenas', 'action' => 'fighter']
+            ); ?>
 
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                  <?=  $this->Html->link(
-                      'Actions diary',
-                      ['controller' => 'Arenas', 'action' => 'diary']
-                   ); ?>
-              </li>
-              <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                  <?=  $this->Html->link(
-                 'Logout',
-                 ['controller' => 'Arenas', 'action' => 'logout']
-              ); ?>
-              </li>
-            </ul>
-        </div>
-    </nav>
+            </li>
+            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                <?=  $this->Html->link(
+                    'Actions diary',
+                    ['controller' => 'Arenas', 'action' => 'diary']
+                 ); ?>
+            </li>
+            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
+                <?=  $this->Html->link(
+               'Logout',
+               ['controller' => 'Arenas', 'action' => 'logout']
+            ); ?>
+            </li>
+          </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+
+
     <?= $this->Flash->render() ?>
     <div class="container clearfix">
         <?= $this->fetch('content') ?>

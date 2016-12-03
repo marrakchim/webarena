@@ -1,10 +1,10 @@
 <?php
-$class = 'message';
+$class = 'info';
 if (!empty($params['class'])) {
-    $class .= ' ' . $params['class'];
+	$class .= ' ' . $params['class'];
 }
 if (!isset($params['escape']) || $params['escape'] !== false) {
-    $message = h($message);
+	$message = h($message);
 }
 ?>
-<div class="<?= h($class) ?>" onclick="this.classList.add('hidden');"><?= $message ?></div>
+<div class="alert alert-<?= $class ?>"><?= $message; ?></div>
