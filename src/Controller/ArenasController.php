@@ -8,6 +8,9 @@ use Cake\ORM\FightersTable;
 
 use Cake\Utility\Hash;
 
+use Cake\I18n\Time;
+
+
 /**
 * Personal Controller
 * User personal interface
@@ -125,6 +128,54 @@ class ArenasController  extends AppController
         $this->Flash->error(__('You could not be disconected. Please, try again.'));
       }
 	  }
+
+    public function chat(){
+      $this->loadModel('Messages');
+      $this->loadModel('Fighters');
+      $session = $this->request->session();
+      $selectedFighter = $session->read('FighterSelected.id');
+
+      $myMessage = $this->Messages->find('all')->where(['fighter_id' => $selectedFighter]);
+
+      foreach($myMessage as $message){
+        $fighter = $this->Fighters->find()->where(['id' => $message->fighter_id_from])->first();
+        $message['from'] = $fighter->name ;
+      }
+
+      $this->set(compact('myMessage'));
+    }
+
+    public function newMessage(){
+      $this->loadModel('Fighters');
+      $this->loadModel('Messages');
+      $message = $this->Messages->newEntity();
+      $playerId = $this->request->session()->read('Players.id');
+      $allFighters = $this->Fighters->find('all')->where(['player_id !=' => $playerId]);
+
+      if($this->request->is('post')){
+        if($this->request->data['fighter_id'] != null){
+          $message->date = new Time();
+          $message->title = $this->request->data['title'];
+          $message->message = $this->request->data['message'];
+          $message->fighter_id_from = $this->request->session()->read('FighterSelected.id');
+          $data = $allFighters->toArray();
+          $receiver = $data[$this->request->data['fighter_id']];
+          $message->fighter_id = $receiver->id;
+          if ($this->Messages->save($message)) {
+            $this->Flash->success(__('The message has been send.'));
+            return $this->redirect(['action' => 'chat']);
+          }
+          else {
+            $this->Flash->error(__('The message could not be send. Please, try again.'));
+            return $this->redirect(['action' => 'chat']);
+          }
+        }
+        else {
+          $this->Flash->error(__('You should select a reciever.'));
+        }
+      }
+      $this->set(compact('allFighters', 'message'));
+    }
 
     public function fighter()
     {
