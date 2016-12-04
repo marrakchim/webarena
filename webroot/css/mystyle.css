@@ -216,13 +216,13 @@ td.case{
 
 @font-face{
 	font-family:'pixeled';
-  src: url('../fonts/pixeled.ttf');
+  src: url('./fonts/pixeled.ttf');
 }
 @font-face{
 	font-family:'roboto-light';
-  src: url('../fonts/Roboto-Light.ttf');
+  src: url('./fonts/Roboto-Light.ttf');
 }
 @font-face{
 	font-family:'RINGBEARER';
-  src: url('../fonts/RINGBEARER.ttf');
+  src: url('./fonts/RINGBEARER.ttf');
 }

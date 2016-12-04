@@ -1,12 +1,16 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-  <?= $this->Html->link(__('Messages'), ['action' => 'chat']) ?>
-</nav>
 
-  <div class="fighters form large-9 medium-8 columns content">
 
-  </div>
+
   <div class="content-wrapper">
     <div class="container-fluid">
+
+      <?
+      echo $this->Html->link(
+          ('Back to messages'),
+          array('action' => 'chat'),
+          array('class' => 'button btn btn-info')
+      );
+      ?>
 
       <div class="row">
         <div class="col-md-12">
