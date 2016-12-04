@@ -424,6 +424,19 @@ class ArenasController  extends AppController
             //Successfull attack
             if($randomValue > $calculation){
                 
+                //Bonus points relative to the guild
+                if($myFighter->guild_id != null) {
+                    
+                    $fightersInGuild = $this->Fighters->find('all')->where(['guild_id' => $myFighter->guild_id]);
+                    
+                    foreach($fightersInGuild as $fighter) {
+                        //If the fighter in same guild is in contact with the ennemy
+                        if( abs($fighter->coordinate_x - $ennemy->coordinate_x) + abs($fighter->coordinate_y - $ennemy->coordinate_y) == 1 && $fighter->id != $myFighter->id) {
+                            $myFighter->skill_strength = $myFighter->skill_strength + 1;
+                        }
+                    }
+                }
+                
                 //Update ennemy health
                 $ennemy->current_health = $ennemy->current_health - $myFighter->skill_strength ;
                 $this->Fighters->save($ennemy);
