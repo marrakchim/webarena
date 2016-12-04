@@ -71,12 +71,25 @@ class EventsTable extends Table
         return $validator;
     }
     
-    public function findLastEvents()
+    public function findLastEventsInSight($sight, $posX, $posY)
     {
-        return $query = $this->find('all', array(
+        
+        $events = $this->find('all', array(
             'conditions' => array(
                 'Events.date BETWEEN NOW() -INTERVAL 1 DAY AND NOW()'),
             'order' => array('Events.date DESC'), ));
+        
+        $eventsInSight = array();
+        
+        foreach($events as $event)
+        {
+            if($sight >= abs($posX - $event->coordinate_x) + abs($posY - $event->coordinate_y))
+            {
+                $eventsInSight[] = $event;
+            }
+        }
+        
+        return $eventsInSight;
     }
     
     public function addNewEvent($eventName, $coord_x, $coord_y)
