@@ -55,7 +55,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <? echo $this->Html->image('logo.png', ['alt' => 'logo']);?>
           </li>
           <li class="">
-              <a href="" class='game-title'>webarena</a>
+              <a href=# class='game-title'>webarena</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
