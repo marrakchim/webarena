@@ -200,5 +200,27 @@ class FightersTable extends Table
             
         $this->save($fighter);
     }
+    
+    public function applyTool($fighterId, $type, $bonus)
+    {
+        $fighter = $this->get($fighterId);
+        
+        switch($type) {
+                
+            case 'sight': $fighter->skill_sight = $fighter->skill_sight + $bonus;
+                break;
+                
+            case 'strength': $fighter->skill_strength = $fighter->skill_strength + $bonus;
+                break;
+                
+            case 'life': $fighter->skill_health = $fighter->skill_health + $bonus;
+                $fighter->current_health = $fighter->current_health + $bonus;
+                break;
+        }
+            
+        $this->save($fighter);
+    }
+    
+    
 
 }

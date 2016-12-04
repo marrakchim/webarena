@@ -27,6 +27,18 @@
                     <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
                 </ul>
             </div>
+            <div>
+                <h3>My Tools</h3>
+                <ul>
+                    <? foreach($mytools as $tool): ?>
+                    <li><?= $tool->type ?> (+<?= $tool->bonus ?>)</li>
+                    <? endforeach; ?>
+                    
+                    <? if($mytools == null): ?>
+                    <li>No tools ... pick one !</li>
+                    <? endif; ?>
+                </ul>
+            </div>
 
         </div>
 
@@ -57,59 +69,97 @@
 
       </div>
 
-      <div class='col-md-4 well'>
-        <center>
-          <table class="arrow ">
-            <tr>
-              <td>
-              </td>
-              <td>
-                <?= $this->Html->image("fh.jpg",
-                      array(
-                        'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'move', 'up'))); ?>
-              </td>
-              <td>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <?= $this->Html->image("fg.jpg",
-                      array(
-                        'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'move', 'left'))); ?>
-              </td>
-              <td>
-                <?= $this->Html->image('sword.png', ['width' => 40]); ?>
-              </td>
-              <td>
-                <?= $this->Html->image("fd.jpg",
-                      array(
-                        'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'move', 'right'))); ?>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              </td>
-              <td>
-                <?= $this->Html->image("fb.jpg",
-                      array(
-                        'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'move', 'down'))); ?>
-              </td>
-              <td>
-              </td>
-            </tr>
-          </table>
-      </center>
+      <div class='col-md-4'>
+          
+          <div class="well">
+              <center>
+                  <table class="arrow ">
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                        <?= $this->Html->image("fh.jpg",
+                              array(
+                                'width' => 40,
+                                'url' => array('controller' => 'arenas', 'action' => 'move', 'up'))); ?>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <?= $this->Html->image("fg.jpg",
+                              array(
+                                'width' => 40,
+                                'url' => array('controller' => 'arenas', 'action' => 'move', 'left'))); ?>
+                      </td>
+                      <td>
+                        <?= $this->Html->image('sword.png', ['width' => 40]); ?>
+                      </td>
+                      <td>
+                        <?= $this->Html->image("fd.jpg",
+                              array(
+                                'width' => 40,
+                                'url' => array('controller' => 'arenas', 'action' => 'move', 'right'))); ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                        <?= $this->Html->image("fb.jpg",
+                              array(
+                                'width' => 40,
+                                'url' => array('controller' => 'arenas', 'action' => 'move', 'down'))); ?>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </table>
+              </center>
+          </div>
+          
+          <div class='well table-responsive'>
+              <h3>Tools Around</h3>
+              <table class='table table-striped' cellpadding="0" cellspacing="0">
+                  <thead class='thead-default'>
+                      <tr>
+                          <th>Type</th>
+                          <th>Bonus</th>
+                          <th>Position</th>
+                          <th>Tool</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php foreach ($toolsAround as $tool): ?>
+                      <form>
+                        <tr>
+                            <td><?= $tool->type ?></td>
+                            <td>+ <?= $tool->bonus ?></td>
+                            <td>(<?= $tool->coordinate_x ?>;<?= $tool->coordinate_y ?>)</td>
+                            <td class="actions">
+                                <? if($tool->available): ?>
+                                    <?= $this->Html->link(__('Pick Tool'), ['action' => 'pickTool', $tool->id], ['class' => 'button btn btn-info']) ?>
+                                <? else: ?>
+                                    -
+                                <? endif; ?>
+                            </td>
+                        </tr>
+                      </form>
+                      <?php endforeach; ?>
+                  </tbody>
+              </table>
+            </div>
+        
     </div>
 
   <?php
   // genere une version indexee des objets
   $indexedFighters=array();
+      
   foreach ($fightersAround as  $f)
     $indexedFighters[$f->coordinate_x][$f->coordinate_y]=$f;
+      
     $view = false;
     ?>
     <div class='table-responsive'>

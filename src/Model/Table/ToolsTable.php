@@ -86,4 +86,54 @@ class ToolsTable extends Table
 
         return $rules;
     }
+    
+    public function initializeTool() {
+        
+        for($i=0;$i<8;$i++){
+            $this->createTool();
+        }
+    }
+    
+    public function createTool()
+    {
+        $tool = $this->newEntity();
+        
+        $type = rand(0,2);
+        
+        switch($type) {
+                
+            case 0: $tool->type = 'sight';
+                break;
+            case 1: $tool->type = 'strength';
+                break;
+            case 2: $tool->type = 'life';
+                break;
+                
+        }
+        
+        $tool->bonus = rand(1,3);
+        $tool->coordinate_x = rand(0,14);
+        $tool->coordinate_y = rand(0,9);
+        
+        $this->save($tool);
+    }
+      
+    public function pickTool($toolId, $fighterId)
+    {
+        $tool = $this->get($toolId);
+        
+        $tool->fighter_id = $fighterId;
+        
+        return $this->save($tool);
+    } 
+    
+    public function releaseFighterTools($fighterId)
+    {
+        $tools = $this->find()->where(['fighter_id' => $fighterId]);
+        
+        foreach($tools as $tool) {
+            $tool->fighter_id = null;
+        }
+        
+    }
 }

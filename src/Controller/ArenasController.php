@@ -119,6 +119,10 @@ class ArenasController  extends AppController
             $selectedFighter = $this->Fighters->selectRandomFighter($res['id']);
 
             $session->write(['FighterSelected.id' => $selectedFighter->id]);
+              
+              //Initialize tools for arena
+              $this->loadModel('Tools');
+              $this->Tools->initializeTool();
 
             return $this->redirect(['controller'=>'arenas', 'action' => 'sight']);
           }else{
@@ -322,6 +326,7 @@ class ArenasController  extends AppController
         
         $this->loadModel('Fighters');
         $this->loadModel('Guilds');
+        $this->loadModel('Tools');
 
         $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
 
@@ -336,6 +341,7 @@ class ArenasController  extends AppController
             $fighterSight = $myFighter->skill_sight;
 
             $fightersAround = array();
+            $toolsAround = array();
 
             foreach ($fighters as $fighter) {
                 $x = $fighter->coordinate_x;
@@ -362,6 +368,26 @@ class ArenasController  extends AppController
                     }
                 }
             }
+            
+            $tools = $this->Tools->find('all');
+            
+            //Tools visible
+            foreach ($tools as $tool) {
+                
+                if($fighterSight >= abs($fighterX - $tool->coordinate_x) + abs($fighterY - $tool->coordinate_y) && $tool->fighter_id == null){
+                    $toolsAround[] = $tool;
+                }
+            }
+            
+            //Tools that can be picked up
+            foreach($toolsAround as $tool){
+                    
+                if($tool['coordinate_x'] == $fighterX && $tool['coordinate_y'] == $fighterY) {
+                    $tool['available'] = true;
+                } else {
+                    $tool['available'] = false;
+                }
+            }
       }
       else {
           $this->Flash->error(__('You have to select a fighter to play.'));
@@ -374,9 +400,13 @@ class ArenasController  extends AppController
         } else {
             $selectedGuild = null;
         }
+        
+        $mytools = $this->Tools->find()->where(['fighter_id' => $fighterSelectedId]);
 
-        $this->set(compact('fightersAround','selectedFighter','selectedGuild'));
+        $this->set(compact('fightersAround','selectedFighter','selectedGuild','toolsAround','mytools'));
         $this->set('_serialize', ['fightersAround']);
+        $this->set('_serialize', ['toolsAround']);
+        $this->set('_serialize', ['mytools']);
 
     }
 
@@ -387,6 +417,7 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $this->loadModel('Events');
         $this->loadModel('Messages');
+        $this->loadModel('Tools');
 
         $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
         $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
@@ -444,6 +475,7 @@ class ArenasController  extends AppController
                 if($ennemy->current_health <= 0){
                     
                     $this->Messages->deleteFighterMessages($ennemy->id);
+                    $this->Tools->releaseFighterTools($fighterId);
                     $this->Fighters->delete($ennemy);
                     
                     //Successful attack and kill : +ennemylevel xp
@@ -497,6 +529,27 @@ class ArenasController  extends AppController
             } 
         }
 
+        return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+    }
+    
+    public function pickTool($toolId) {
+        
+        $this->loadModel('Fighters');
+        $this->loadModel('Events');
+        $this->loadModel('Tools');
+        
+        $session = $this->request->session();
+        $selectedFighterId = $session->read('FighterSelected.id');
+        
+        $selectedFighter = $this->Fighters->get($selectedFighterId);
+        
+        $tool = $this->Tools->pickTool($toolId, $selectedFighterId);
+        
+        $this->Fighters->applyTool($selectedFighterId, $tool->type, $tool->bonus);
+        
+        $this->Events->addNewEvent($selectedFighter->name.' picked a tool !', $selectedFighter->coordinate_x, $selectedFighter->coordinate_y);
+        $this->Flash->success(__('Tool picked'));
+        
         return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
 
