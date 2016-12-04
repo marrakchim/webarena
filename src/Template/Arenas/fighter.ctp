@@ -10,9 +10,9 @@
     );
     ?>
     <div class="fighters ">
-      <h4 class='margin-top-30px'>Events in sight less than 24 hours</h4>
+      <h4 class='margin-top-30px'></h4>
 
-        <div class='table-responsive'>
+        <div class='well table-responsive'>
           <table class='table table-striped' cellpadding="0" cellspacing="0">
               <thead class='thead-default'>
                   <tr>

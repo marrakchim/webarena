@@ -2,7 +2,7 @@
   <div class='container'>
     <div class='row'>
         <h1 class='page-header'>Messages</h1>
-        <ul>
+        <div class='inline-info-space-between'>
           <?
           echo $this->Html->link(
               ('Send a message'),
@@ -17,7 +17,14 @@
               array('class' => 'button btn btn-info')
           );
           ?>
-        </ul>
+          <?
+          echo $this->Html->link(
+              ('New guild'),
+              array('action' => 'guild_create'),
+              array('class' => 'button btn btn-warning')
+          );
+          ?>
+        </div>
 
         <h4 class='margin-top-30px'>Messages received</h4>
         <div class='table-responsive'>

@@ -80,12 +80,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                  ['controller' => 'Arenas', 'action' => 'fighter']
               ).'<li>';
               echo '<li>'.$this->Html->link(
-               'Arenas',
+               'Arena',
                ['controller' => 'Arenas', 'action' => 'sight']
              ).'<li>';
              echo '<li>'.$this->Html->link(
                'Chat',
                ['controller' => 'Arenas', 'action' => 'chat']
+             ).'<li>';
+             echo '<li>'.$this->Html->link(
+               'Guilds',
+               ['controller' => 'Arenas', 'action' => 'guild']
              ).'<li>';
              echo '<li>'.$this->Html->link(
                'Diary',

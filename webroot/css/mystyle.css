@@ -69,6 +69,14 @@ a.game-title{
   padding-left:0;
 }
 
+.inline-info-flex-start{
+  display:flex;
+  align-items: center;
+  justify-content:flex-start;
+  padding:20px;
+  padding-left:0;
+}
+
 .aligned{
   height:100%:
 }
@@ -229,13 +237,13 @@ td.case{
 
 @font-face{
 	font-family:'pixeled';
-  src: url('../fonts/pixeled.ttf');
+  src: url('../webroot/fonts/pixeled.ttf');
 }
 @font-face{
 	font-family:'roboto-light';
-  src: url('../fonts/Roboto-Light.ttf');
+  src: url('../webroot/fonts/Roboto-Light.ttf');
 }
 @font-face{
 	font-family:'RINGBEARER';
-  src: url('../fonts/RINGBEARER.ttf');
+  src: url('../webroot/fonts/RINGBEARER.ttf');
 }
