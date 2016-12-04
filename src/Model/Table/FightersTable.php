@@ -143,6 +143,7 @@ class FightersTable extends Table
         $fighter->level = 0;
         $fighter->xp = 0;
         $fighter->skill_sight = 2;
+        $fighter->skill_strength = 1;
         $fighter->skill_health = 3;
         $fighter->current_health = 3;
             
@@ -153,8 +154,8 @@ class FightersTable extends Table
     {
         $resultsArray = $this->find()->where(['player_id' => $playerId])->toArray();
                                  
-        if($resultsArray[0] == NULL) {
-            $fighter = createANewChampionFor($playerId,'MyFirstChampion');
+        if($resultsArray == NULL) {
+            $fighter = $this->createANewChampionFor($playerId,'MyFirstChampion');
         } else {
             $fighter = $resultsArray[0];
         }

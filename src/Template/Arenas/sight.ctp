@@ -1,36 +1,43 @@
 <div class="fighters col-md-6 ">
   <div class='container'>
     <div class='row'>
-        <h1 class='page-header'>Fighters around you</h1>
+        <h2 class='page-header'>ARENA</h2>
+        
+        <h3>My Fighter</h3>
 
         <div class='well inline-info'>
           <p>
             <? if(file_exists(WWW_ROOT .'/img/avatars/'.$selectedFighter->id.'.jpg')){
               echo $this->Html->image('avatars/'.$selectedFighter->id.'.jpg',
               array(
-                'width' => 40)
+                'width' => 50)
               );
               } else{ echo $this->Html->image('avatars/default.jpg', array(
-                'width' => 40)); } ?>
+                'width' => 50)); } ?>
           </p>
-          <p>Your fighter : <?= $selectedFighter->name; ?></p>
-          <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;
-          } else {echo "Your fighter does not have a guild.";} ?></p>
+            <div>
+                <p>Your fighter : <?= $selectedFighter->name; ?> (<?= $this->Number->format($selectedFighter->coordinate_x) ?>;<?= $this->Number->format($selectedFighter->coordinate_y) ?>)</p>
+                <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;} else {echo "Your fighter does not have a guild.";} ?></p>
+            </div>
+            <div>
+                <ul>
+                    <li>Level: <?= $this->Number->format($selectedFighter->level) ?></li>
+                    <li>XP: <?= $this->Number->format($selectedFighter->xp) ?></li>
+                    <li>Strength: <?= $this->Number->format($selectedFighter->skill_strength) ?></li>
+                    <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
+                </ul>
+            </div>
+          
         </div>
-
+        
+        <h3>Players around</h3>
+        
         <div class="well inline-info">
-            <ul>
-                <li>ME</li>
-                <li>Level: <?= $this->Number->format($selectedFighter->level) ?></li>
-                <li>XP: <?= $this->Number->format($selectedFighter->xp) ?></li>
-                <li>Strength: <?= $this->Number->format($selectedFighter->skill_strength) ?></li>
-                <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
-            </ul>
 
             <?php foreach ($fightersAround as $fighter): ?>
                 <?php if ($selectedFighter->id != $fighter->id): ?>
                 <ul>
-                    <li><?= $fighter->name ?></li>
+                    <li><strong><?= $fighter->name ?> (<?= $this->Number->format($fighter->coordinate_x) ?>;<?= $this->Number->format($fighter->coordinate_y) ?>)</strong></li>
                     <li>Level: <?= $this->Number->format($fighter->level) ?></li>
                     <li>XP: <?= $this->Number->format($fighter->xp) ?></li>
                     <li>Strength: <?= $this->Number->format($fighter->skill_strength) ?></li>

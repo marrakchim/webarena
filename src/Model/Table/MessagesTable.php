@@ -91,8 +91,10 @@ class MessagesTable extends Table
     
     public function deleteFighterMessages($fighterId)
     {
-        $query = $articles->query();
+        $query = $this->query();
         $query->delete()->where(['fighter_id_from' => $fighterId])->execute();
+        
+        $query = $this->query();
         $query->delete()->where(['fighter_id' => $fighterId])->execute();
     }
 }
