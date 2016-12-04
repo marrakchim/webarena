@@ -23,16 +23,7 @@ class ArenasController  extends AppController
 {
     public function index()
     {
-        $this->set('myname', "Julien Falconnet");
-        /*
-        $this->loadModel('Fighters');
-        $figterlist=$this->Fighters->find('all');
-        //pr($figterlist->toArray());
 
-        foreach($figterlist as $figter) {
-            $result = $figter->FightersTable::test();
-            $this->set('myname', $result);
-        }*/
     }
 
     public function subscribe(){
@@ -47,7 +38,7 @@ class ArenasController  extends AppController
           $this->render();
       }
 
-      $this->set('title', 'Login');
+      $this->set('title', 'Subscribe');
       $this->loadModel('Players');
       $player = $this->Players->newEntity();
 
@@ -78,6 +69,8 @@ class ArenasController  extends AppController
 
         }
     }
+
+    $this->Flash->error(__('what'));
 
     }
 
@@ -139,10 +132,10 @@ class ArenasController  extends AppController
 	  }
 
     public function chat(){
-        
+
         $this->loadModel('Messages');
         $this->loadModel('Fighters');
-        
+
         $session = $this->request->session();
         $selectedFighter = $session->read('FighterSelected.id');
 
@@ -193,12 +186,12 @@ class ArenasController  extends AppController
       }
       $this->set(compact('allFighters', 'message'));
     }
-    
+
     public function yell()
     {
         $this->loadModel('Fighters');
         $this->loadModel('Events');
-  
+
         if ($this->request->is('post')) {
 
             $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
@@ -260,7 +253,7 @@ class ArenasController  extends AppController
         $fighter = $this->Fighters->get($fighterId);
 
         if ($this->request->is('post')) {
-            
+
             $target_path = WWW_ROOT .'/img/avatars/'. $fighterId . '.jpg';
             move_uploaded_file($this->request->data('url.tmp_name'), $target_path);
 
@@ -357,14 +350,14 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-              
+
             $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
@@ -403,14 +396,14 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
@@ -449,14 +442,14 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }
@@ -494,14 +487,14 @@ class ArenasController  extends AppController
             $myFighter->xp = $myFighter->xp + $canIGo->level;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
           else {
             $myFighter->xp = $myFighter->xp + 1;
             $this->Fighters->save($myFighter);
             $this->Flash->success(__('Hit !'));
-              
+
               $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
           }
         }

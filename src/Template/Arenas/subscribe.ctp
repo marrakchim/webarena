@@ -6,11 +6,10 @@
       <div class="row">
         <div class="col-md-12">
           <h2 class="page-title">No account? Create one ! </h2>
-          <?= $this->Form->create(null,['name' => 'Register']) ?>
 
           <div class="well">
+            <?= $this->Form->create(null,['name' => 'Register']) ?>
 
-          <form action=""  class="mt">
             <div class="row col-md-9" >
                 <? echo $this->Form->input('email', array('required'=>'true','placeholder'=>'example@gmail.com','type' => 'email', 'class' => 'form-control mb padding-10px margin-10px' ));;?>
             </div>
@@ -31,7 +30,6 @@
                 ));
             ?>
 
-          </form>
           <?= $this->Form->end() ?>
 
         </div>
