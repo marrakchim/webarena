@@ -42,7 +42,7 @@
               array(
                 'width' => 50)
               );
-              } else{ echo $this->Html->image('avatars/default.jpg', array(
+              } else{ echo $this->Html->image('avatars/default.png', array(
                 'width' => 50)); } ?></li>
                     <li><strong><?= $fighter->name ?> (<?= $this->Number->format($fighter->coordinate_x) ?>;<?= $this->Number->format($fighter->coordinate_y) ?>)</strong></li>
                     <li>Level: <?= $this->Number->format($fighter->level) ?></li>
