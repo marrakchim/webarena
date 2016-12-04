@@ -17,6 +17,29 @@
           <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;
           } else {echo "Your fighter does not have a guild.";} ?></p>
         </div>
+        
+        <div class="well inline-info">
+            <ul>
+                <li>ME</li>
+                <li>Level: <?= $this->Number->format($selectedFighter->level) ?></li>
+                <li>XP: <?= $this->Number->format($selectedFighter->xp) ?></li>
+                <li>Strength: <?= $this->Number->format($selectedFighter->skill_strength) ?></li>
+                <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
+            </ul>
+            
+            <?php foreach ($fightersAround as $fighter): ?>
+                <?php if ($selectedFighter->id != $fighter->id): ?>
+                <ul>
+                    <li><?= $fighter->name ?></li>
+                    <li>Level: <?= $this->Number->format($fighter->level) ?></li>
+                    <li>XP: <?= $this->Number->format($fighter->xp) ?></li>
+                    <li>Strength: <?= $this->Number->format($fighter->skill_strength) ?></li>
+                    <li>Life: <?= $this->Number->format($fighter->current_health) . ' / ' . $this->Number->format($fighter->skill_health) ?></li>
+                </ul>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+        
       </div>
 
       <div class='col-md-4 well'>
@@ -29,7 +52,7 @@
                 <?= $this->Html->image("fh.jpg",
                       array(
                         'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'moveUp'))); ?>
+                        'url' => array('controller' => 'arenas', 'action' => 'move', 'up'))); ?>
               </td>
               <td>
               </td>
@@ -39,7 +62,7 @@
                 <?= $this->Html->image("fg.jpg",
                       array(
                         'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'moveLeft'))); ?>
+                        'url' => array('controller' => 'arenas', 'action' => 'move', 'left'))); ?>
               </td>
               <td>
                 <?= $this->Html->image('sword.png', ['width' => 40]); ?>
@@ -48,7 +71,7 @@
                 <?= $this->Html->image("fd.jpg",
                       array(
                         'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'moveRight'))); ?>
+                        'url' => array('controller' => 'arenas', 'action' => 'move', 'right'))); ?>
               </td>
             </tr>
             <tr>
@@ -58,7 +81,7 @@
                 <?= $this->Html->image("fb.jpg",
                       array(
                         'width' => 40,
-                        'url' => array('controller' => 'arenas', 'action' => 'moveDown'))); ?>
+                        'url' => array('controller' => 'arenas', 'action' => 'move', 'down'))); ?>
               </td>
               <td>
               </td>

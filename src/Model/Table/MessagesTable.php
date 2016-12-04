@@ -88,4 +88,11 @@ class MessagesTable extends Table
 
         return $rules;
     }
+    
+    public function deleteFighterMessages($fighterId)
+    {
+        $query = $articles->query();
+        $query->delete()->where(['fighter_id_from' => $fighterId])->execute();
+        $query->delete()->where(['fighter_id' => $fighterId])->execute();
+    }
 }
