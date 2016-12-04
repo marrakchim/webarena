@@ -21,7 +21,7 @@
           array(
             'width' => 150)
           );
-          } else{ echo $this->Html->image('avatars/default.jpg', array(
+        } else{ echo $this->Html->image('avatars/default.png', array(
             'width' => 150)); }
         ?>
       </div>

@@ -29,7 +29,7 @@
           array(
             'width' => 200)
           );
-          } else{ echo $this->Html->image('avatars/default.jpg', array(
+        } else{ echo $this->Html->image('avatars/default.png', array(
             'width' => 200)); }
         ?>
 
@@ -42,12 +42,12 @@
 
       <center>
     </div>
-          
+
 
           <div class='row col-md-12 well'>
-              
+
               <?php if($fighter->xp >= 4): ?>
-              
+
               <h2>Increase your fighter's level !</h2>
 
               <div class="inline-info">
@@ -71,20 +71,20 @@
                         );
                 ?>
               </div>
-              
+
               <?php else: ?>
-              
+
               <h2>You cannot increase your fighter's level !</h2>
-              
+
               <p>Get at least 4 experience points to pass to level <?= $nextLevel ?></p>
-              
+
               <?php endif; ?>
-          
+
           </div>
-          
-    
-          
-        
+
+
+
+
 
 
   </div>
