@@ -12,7 +12,7 @@
               array(
                 'width' => 50)
               );
-              } else{ echo $this->Html->image('avatars/default.jpg', array(
+            } else{ echo $this->Html->image('avatars/default.png', array(
                 'width' => 50)); } ?>
           </p>
             <div>
@@ -127,7 +127,7 @@
                             array(
                               'width' => 30)
                             );
-                            } else{ echo $this->Html->image('avatars/default.jpg', array(
+                          } else{ echo $this->Html->image('avatars/default.png', array(
                               'width' => 30)); }
 
                           echo "</td>";
@@ -143,7 +143,7 @@
                             array(
                               'width' => 30)
                             );
-                            } else{ echo $this->Html->image('avatars/default.jpg', array(
+                          } else{ echo $this->Html->image('avatars/default.png', array(
                               'width' => 30)); }
 
                           echo "</td>";

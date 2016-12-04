@@ -30,7 +30,7 @@
                   <?php foreach ($fighters as $fighter): ?>
                   <form>
                     <tr>
-                        <td><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$fighter->id.'.jpg', array('width'=>40)); } else{ echo $this->Html->image('avatars/default.jpg', array('width'=>40)); } ?></td>
+                        <td><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$fighter->id.'.jpg', array('width'=>40)); } else{ echo $this->Html->image('avatars/default.png', array('width'=>40)); } ?></td>
                         <td><?= h($fighter->name) ?></td>
                         <td><?= $this->Number->format($fighter->level) ?></td>
                         <td><?= $this->Number->format($fighter->xp) ?></td>
