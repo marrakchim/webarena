@@ -169,11 +169,11 @@ class ArenasController  extends AppController
           $receiver = $data[$this->request->data['fighter_id']];
           $message->fighter_id = $receiver->id;
           if ($this->Messages->save($message)) {
-            $this->Flash->success(__('The message has been send.'));
+            $this->Flash->success(__('The message has been sent.'));
             return $this->redirect(['action' => 'chat']);
           }
           else {
-            $this->Flash->error(__('The message could not be send. Please, try again.'));
+            $this->Flash->error(__('The message could not be sent. Please, try again.'));
             return $this->redirect(['action' => 'chat']);
           }
         }

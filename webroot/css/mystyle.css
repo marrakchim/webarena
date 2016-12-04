@@ -209,3 +209,20 @@ td.case{
 		-webkit-transform: translateY(0%);
 	}
 }
+/****************************************************************************/
+/*FONTS*/
+/****************************************************************************/
+
+
+@font-face{
+	font-family:'pixeled';
+  src: url('../fonts/pixeled.ttf');
+}
+@font-face{
+	font-family:'roboto-light';
+  src: url('../fonts/Roboto-Light.ttf');
+}
+@font-face{
+	font-family:'RINGBEARER';
+  src: url('../fonts/RINGBEARER.ttf');
+}
