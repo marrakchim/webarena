@@ -123,6 +123,8 @@ a.game-title{
   padding:0!important;
   background-color:	#e6e6e6;
   text-align: center;
+  border: 1px solid #ddd;
+  vertical-align: middle !important;
 }
 
 .vide{
