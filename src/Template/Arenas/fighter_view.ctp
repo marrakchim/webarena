@@ -1,3 +1,5 @@
+<? $nextLevel = $fighter->level + 1; ?>
+
 <div class='container'>
   <div class='row '>
     <h1 class='page-header'>Details of my fighter</h1>
@@ -31,7 +33,7 @@
             'width' => 200)); }
         ?>
 
-            <div><?= $fighter->name ?></div>
+            <div><strong><?= $fighter->name ?></strong></div>
             <div>Level: <?= $this->Number->format($fighter->level) ?></div>
             <div>XP: <?= $this->Number->format($fighter->xp) ?></div>
             <div>Sight: <?= $this->Number->format($fighter->skill_sight) ?></div>
@@ -40,6 +42,49 @@
 
       <center>
     </div>
+          
+
+          <div class='row col-md-12 well'>
+              
+              <?php if($fighter->xp >= 4): ?>
+              
+              <h2>Increase your fighter's level !</h2>
+
+              <div class="inline-info">
+                  <?
+                    echo $this->Html->link(
+                        ('Pass level '.$nextLevel.' and increase Sight (+1)'),
+                        array('action' => 'fighterPassLevel', $fighter->id, 'sight'),
+                        array('class' => 'button btn btn-info')
+                        );
+
+                    echo $this->Html->link(
+                        ('Pass level '.$nextLevel.' and increase Strength (+1)'),
+                        array('action' => 'fighterPassLevel', $fighter->id, 'strength'),
+                        array('class' => 'button btn btn-info')
+                        );
+
+                    echo $this->Html->link(
+                        ('Pass level '.$nextLevel.' and gain (+3) lifepoints'),
+                        array('action' => 'fighterPassLevel', $fighter->id, 'life'),
+                        array('class' => 'button btn btn-info')
+                        );
+                ?>
+              </div>
+              
+              <?php else: ?>
+              
+              <h2>You cannot increase your fighter's level !</h2>
+              
+              <p>Get at least 4 experience points to pass to level <?= $nextLevel ?></p>
+              
+              <?php endif; ?>
+          
+          </div>
+          
+    
+          
+        
 
 
   </div>

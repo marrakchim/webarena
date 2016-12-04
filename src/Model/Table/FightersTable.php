@@ -177,5 +177,28 @@ class FightersTable extends Table
         
         return true;
     }
+    
+    public function passLevel($fighterId, $skill)
+    {
+        $fighter = $this->get($fighterId);
+        
+        switch($skill) {
+                
+            case 'sight': $fighter->skill_sight = $fighter->skill_sight +1;
+                break;
+                
+            case 'strength': $fighter->skill_strength = $fighter->skill_strength +1;
+                break;
+                
+            case 'life': $fighter->skill_health = $fighter->skill_health +3;
+                $fighter->current_health = $fighter->current_health +3;
+                break;
+        }
+        
+        $fighter->xp = $fighter->xp -4;
+        $fighter->level = $fighter->level +1;
+            
+        $this->save($fighter);
+    }
 
 }

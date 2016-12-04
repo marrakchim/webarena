@@ -268,6 +268,16 @@ class ArenasController  extends AppController
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
+    
+    public function fighterPassLevel($fighterId, $skill)
+    {
+        $this->checkConnexion();
+        
+        $this->loadModel('Fighters');
+        $this->Fighters->passLevel($fighterId, $skill);
+        
+        $this->redirect(['action' => 'fighterView', $fighterId]);
+    }
 
     public function fighterAvatar($fighterId)
     {
@@ -466,21 +476,6 @@ class ArenasController  extends AppController
 
         return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
-
-    /*public function hit($fighter){
-      $this->loadModel('Fighters');
-      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-      $randomValue = rand(1,20);
-      $calculation = 10 + $fighter->level - $myFighter->level ;
-      if($randomValue > $calculation){
-        $fighter->current_health = $fighter->current_health - $myFighter->skill_strength ;
-        $this->Fighters->save($fighter);
-        $this->Flash->success(__('Hit !'));
-      }
-      else {
-        $this->Flash->error(__('Fail !'));
-      }
-    }*/
 
 
     public function diary()

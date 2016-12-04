@@ -38,7 +38,7 @@
                         <td><?= $this->Number->format($fighter->skill_strength) ?></td>
                         <td><?= $this->Number->format($fighter->current_health) . ' / ' . $this->Number->format($fighter->skill_health) ?></td>
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'fighterView', $fighter->id]) ?>
+                            <?= $this->Html->link(__('View & Pass level'), ['action' => 'fighterView', $fighter->id]) ?>
                             <br />
                             <?= $this->Html->link(__('Edit Avatar'), ['action' => 'fighterAvatar', $fighter->id]) ?>
                             <br />
