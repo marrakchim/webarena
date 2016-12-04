@@ -27,7 +27,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('bootstrap.min') ?>
-    <?= $this->Html->script(['bootstrap.min', 'jquery-3.1.1.min']);?>
+    <?= $this->Html->script(['jquery-3.1.1.min','bootstrap.min']);?>
     <?= $this->Html->css('mystyle');  ?>
 
     <?= $this->fetch('meta') ?>
@@ -60,39 +60,46 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
-            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> class="">
-              <?=  $this->Html->link(
+
+            <? if(null==$this->request->session()->read('Players.email')){
+              echo '<li>'.$this->Html->link(
+                'Login',
+                ['controller' => 'Arenas', 'action' => 'login']
+              ).'<li>';
+              echo '<li>'.$this->Html->link(
+                'Subscribe',
+                ['controller' => 'Arenas', 'action' => 'subscribe']
+              ).'<li>';
+              }else{
+              echo '<li>'.$this->Html->link(
                 'Home',
                 ['controller' => 'Arenas', 'action' => 'index']
-             ); ?>
-            </li>
-            </li>
-            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                <?=  $this->Html->link(
+              ).'<li>';
+              echo '<li>'.$this->Html->link(
+                 'Fighters',
+                 ['controller' => 'Arenas', 'action' => 'fighter']
+              ).'<li>';
+              echo '<li>'.$this->Html->link(
                'Arenas',
                ['controller' => 'Arenas', 'action' => 'sight']
-            ); ?>
-
-            </li >
-            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?> >
-            <?=  $this->Html->link(
-               'My fighters',
-               ['controller' => 'Arenas', 'action' => 'fighter']
-            ); ?>
-
-            </li>
-            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                <?=  $this->Html->link(
-                    'Actions diary',
-                    ['controller' => 'Arenas', 'action' => 'diary']
-                 ); ?>
-            </li>
-            <li <?php if(null==$this->request->session()->read('Players.email')) echo'hidden';?>>
-                <?=  $this->Html->link(
+             ).'<li>';
+             echo '<li>'.$this->Html->link(
+               'Chat',
+               ['controller' => 'Arenas', 'action' => 'chat']
+             ).'<li>';
+             echo '<li>'.$this->Html->link(
+               'Diary',
+               ['controller' => 'Arenas', 'action' => 'diary']
+             ).'<li>';
+             echo '<li>'.$this->Html->link(
                'Logout',
                ['controller' => 'Arenas', 'action' => 'logout']
-            ); ?>
-            </li>
+             ).'<li>';
+
+            }
+            ?>
+
+
           </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

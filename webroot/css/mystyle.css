@@ -77,3 +77,44 @@ td.case{
   background-color:	#e6e6e6;
   text-align: center;
 }
+
+/****************************************************************************/
+
+.showMe {
+	display: block!important;
+	opacity: 1;
+	animation: fadeOut 2s ease-in-out;
+    -moz-animation: fadeOut 2s ease-in-out;
+    -webkit-animation: fadeOut 2s ease-in-out;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity:0;
+        display: block;
+    }
+    100% {
+        opacity:1;
+        display: none;
+    }
+}
+@-moz-keyframes fadeOut {
+    0% {
+        opacity:0;
+        display: block;
+    }
+    100% {
+        opacity:1;
+        display: none;
+    }
+}
+@-webkit-keyframes fadeOut {
+    0% {
+       opacity:0;
+        display: block;
+    }
+    100% {
+        opacity:1;
+        display: none;
+    }
+}

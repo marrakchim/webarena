@@ -225,3 +225,5 @@ if (Configure::read('debug')) {
 Plugin::load('Migrations');
 
 Plugin::load('Flash');
+
+Plugin::load('Flash');

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f61a2db1ad498a3159c210f94c2b41c",
-    "content-hash": "8ff4b464cc5fcf2fbd4731d1f8d4cd00",
+    "hash": "3da32ba4d652438070aa1fc39d5c398e",
+    "content-hash": "c1d5a035efcf7c6ad27b4e84373ed590",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -343,6 +343,54 @@
             ],
             "description": "A composer installer for CakePHP 3.0+ plugins.",
             "time": "2016-04-28 03:01:34"
+        },
+        {
+            "name": "dereuromark/cakephp-flash",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dereuromark/cakephp-flash.git",
+                "reference": "9d70b47b3df6fd4e349b6b56cab7058746fea771"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dereuromark/cakephp-flash/zipball/9d70b47b3df6fd4e349b6b56cab7058746fea771",
+                "reference": "9d70b47b3df6fd4e349b6b56cab7058746fea771",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "~3.2",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "fig-r/psr2r-sniffer": "dev-master"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Flash\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Scherer",
+                    "homepage": "http://www.dereuromark.de",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A CakePHP plugin around powerful flash message handling.",
+            "homepage": "https://github.com/dereuromark/cakephp-flash",
+            "keywords": [
+                "cakephp",
+                "flash",
+                "messages",
+                "plugin"
+            ],
+            "time": "2016-10-16 23:08:29"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
