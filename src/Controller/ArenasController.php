@@ -21,18 +21,18 @@ use Cake\Filesystem\Folder;
 */
 class ArenasController  extends AppController
 {
-    
+
     function checkConnexion() {
-        
+
         $sessionUser = $this->request->session();
-        
+
         //User not connected : go to login page
         if($sessionUser->read("Players.id") == null){
             $this->Flash->error(__('You have to log in to access to the page.'));
             return $this->redirect(['controller'=>'arenas', 'action' => 'login']);
         }
     }
-    
+
     public function index()
     {
 
@@ -125,6 +125,7 @@ class ArenasController  extends AppController
               $this->Flash->error(__('The player could not be loaded. Please, try again.'));
           }
         }
+
       }
     }
 
@@ -141,7 +142,7 @@ class ArenasController  extends AppController
 	  }
 
     public function chat(){
-        
+
         $this->checkConnexion();
 
         $this->loadModel('Messages');
@@ -167,9 +168,9 @@ class ArenasController  extends AppController
     }
 
     public function newMessage(){
-        
+
         $this->checkConnexion();
-        
+
       $this->loadModel('Fighters');
       $this->loadModel('Messages');
       $message = $this->Messages->newEntity();
@@ -204,7 +205,7 @@ class ArenasController  extends AppController
     public function yell()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $this->loadModel('Events');
 
@@ -223,7 +224,7 @@ class ArenasController  extends AppController
     public function fighter()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $playerId = $this->request->session()->read('Players.id');
         $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
@@ -238,7 +239,7 @@ class ArenasController  extends AppController
     public function fighterAdd()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->newEntity();
 
@@ -261,28 +262,28 @@ class ArenasController  extends AppController
     public function fighterView($fighterId)
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
 
         $this->set(compact('fighter'));
         $this->set('_serialize', ['fighter']);
     }
-    
+
     public function fighterPassLevel($fighterId, $skill)
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $this->Fighters->passLevel($fighterId, $skill);
-        
+
         $this->redirect(['action' => 'fighterView', $fighterId]);
     }
 
     public function fighterAvatar($fighterId)
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
 
@@ -319,7 +320,7 @@ class ArenasController  extends AppController
     public function sight()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Fighters');
         $this->loadModel('Guilds');
 
@@ -340,7 +341,7 @@ class ArenasController  extends AppController
             foreach ($fighters as $fighter) {
                 $x = $fighter->coordinate_x;
                 $y = $fighter->coordinate_y;
-                
+
                 if($fighterSight >= abs($fighterX - $x) + abs($fighterY - $y)){
                     $visible = true;
                 }
@@ -351,9 +352,9 @@ class ArenasController  extends AppController
                 if(($visible && $fighter->player_id != $playerId && $fighter->current_health > 0) || ($fighter->id == $fighterSelectedId)){
                     $fightersAround[] = $fighter;
                 }
-                
+
                 foreach($fightersAround as $fighter){
-                    
+
                     if($fighter['guild_id']) {
                         $guild = $this->Guilds->get($fighter['guild_id']);
                         $fighter['guild'] = $guild->name;
@@ -390,8 +391,8 @@ class ArenasController  extends AppController
 
         $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
         $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-        
-        
+
+
         //Check if ennemy on asked move
         switch($type)
         {
@@ -405,76 +406,64 @@ class ArenasController  extends AppController
             break;
 
             case 'right' : $ennemy = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y + 1])->first();
-            break;  
+            break;
         }
-        
+
         //If it is one of my fighters
         if(isset($ennemy)){
             if($ennemy->player_id == $this->request->session()->read('Players.id')) {
                 $ennemy = null;
             }
         }
-        
+
         //If there is an ennemy
         if(isset($ennemy)){
-            
+
             $randomValue = rand(1,20);
             $calculation = 10 + $ennemy->level - $myFighter->level;
-            
+
             //Successfull attack
             if($randomValue > $calculation){
-                
-                //Bonus points relative to the guild
-                if($myFighter->guild_id != null) {
-                    
-                    $fightersInGuild = $this->Fighters->find('all')->where(['guild_id' => $myFighter->guild_id]);
-                    
-                    foreach($fightersInGuild as $fighter) {
-                        //If the fighter in same guild is in contact with the ennemy
-                        if( abs($fighter->coordinate_x - $ennemy->coordinate_x) + abs($fighter->coordinate_y - $ennemy->coordinate_y) == 1 && $fighter->id != $myFighter->id) {
-                            $myFighter->skill_strength = $myFighter->skill_strength + 1;
-                        }
-                    }
-                }
-                
+
                 //Update ennemy health
                 $ennemy->current_health = $ennemy->current_health - $myFighter->skill_strength ;
                 $this->Fighters->save($ennemy);
-                
+
                 if($ennemy->current_health <= 0){
-                    
+
                     $this->Messages->deleteFighterMessages($ennemy->id);
                     $this->Fighters->delete($ennemy);
-                    
+
                     //Successful attack and kill : +ennemylevel xp
                     $myFighter->xp = $myFighter->xp + $ennemy->level;
+
                     $this->Fighters->save($myFighter);
-                    
+
                     $this->Flash->success(__('Congratulations you have killed : '. $ennemy->name .' !'));
 
                     $this->Events->addNewEvent($myFighter->name.' killed '.$ennemy->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
                 }
                 else {
-                    
+
                     //Successful attack but no kill : +1 xp
                     $myFighter->xp = $myFighter->xp + 1;
                     $this->Fighters->save($myFighter);
-                    
+
                     $this->Flash->success(__('You attacked '.$ennemy->name.' and hit him !'));
                     $this->Events->addNewEvent($myFighter->name.' attacks '.$ennemy->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
                 }
             }
             else {
-            
+
                 $this->Flash->error(__('You attacked '.$ennemy->name.' but failed !'));
                 $this->Events->addNewEvent($myFighter->name.' attacks '.$ennemy->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
             }
         }
         //If there is no ennemy
         else {
-            
+
             $move = false;
-            
+
             if( $type == 'up' && ($myFighter->coordinate_x-1) >= 0 ) {
                 $myFighter->coordinate_x = $myFighter->coordinate_x - 1 ;
                 $move = true;
@@ -488,13 +477,13 @@ class ArenasController  extends AppController
                 $myFighter->coordinate_y = $myFighter->coordinate_y + 1 ;
                 $move = true;
             }
-            
+
             if($move) {
                 $this->Fighters->save($myFighter);
                 $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
             } else {
                 $this->Flash->error(__('You are not allowed to go there.'));
-            } 
+            }
         }
 
         return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
@@ -504,13 +493,13 @@ class ArenasController  extends AppController
     public function diary()
     {
         $this->checkConnexion();
-        
+
         $session = $this->request->session();
         $selectedFighterId = $session->read('FighterSelected.id');
 
         $this->loadModel('Fighters');
         $selectedFighter = $this->Fighters->get($selectedFighterId);
-        
+
         $this->loadModel('Events');
         $this->set('events', $this->Events->findLastEventsInSight($selectedFighter->skill_sight, $selectedFighter->coordinate_x, $selectedFighter->coordinate_y));
     }
@@ -518,7 +507,7 @@ class ArenasController  extends AppController
     public function guild()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Guilds');
         $guilds = $this->Guilds->find('all');
 
@@ -537,7 +526,7 @@ class ArenasController  extends AppController
     public function guildView($guildId)
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Guilds');
         $guild = $this->Guilds->get($guildId);
 
@@ -597,7 +586,7 @@ class ArenasController  extends AppController
     public function guildCreate()
     {
         $this->checkConnexion();
-        
+
         $this->loadModel('Guilds');
         $guildCreate = $this->Guilds->newEntity();
 
