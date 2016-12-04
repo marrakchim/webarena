@@ -2,7 +2,7 @@
   <div class='container'>
     <div class='row'>
         <h1 class='page-header'>ARENA</h1>
-        
+
         <h2>My Fighter</h2>
 
         <div class='well inline-info'>
@@ -27,11 +27,11 @@
                     <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
                 </ul>
             </div>
-          
+
         </div>
-        
+
         <h2>Players around</h2>
-        
+
         <div class="well inline-info">
 
             <?php foreach ($fightersAround as $fighter): ?>
@@ -120,18 +120,37 @@
 
                         if($selectedFighter->skill_sight >= abs($selectedFighter->coordinate_x - $i) + abs($selectedFighter->coordinate_y - $j)) { $visible = true; }
 
-                        if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id")))
-                        echo "<td class='case'> Y </td>";
+                          if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id"))){
+                          echo "<td class='case view'>";
+                          if(file_exists(WWW_ROOT .'/img/avatars/'.$selectedFighter->id.'.jpg')){
+                            echo $this->Html->image('avatars/'.$selectedFighter->id.'.jpg',
+                            array(
+                              'width' => 30)
+                            );
+                            } else{ echo $this->Html->image('avatars/default.jpg', array(
+                              'width' => 30)); }
 
+                          echo "</td>";
 
+                        }
                         elseif($visible && !isset($indexedFighters[$i][$j]))
-                        echo "<td class='case'> O </td>";
+                        echo "<td class='case view'>  </td>";
 
-                        elseif($visible && isset($indexedFighters[$i][$j]))
-                        echo "<td class='case'> X </td>";
+                        elseif($visible && isset($indexedFighters[$i][$j])){
+                          echo "<td class='case view'>";
+                          if(file_exists(WWW_ROOT .'/img/avatars/'.$indexedFighters[$i][$j]->id.'.jpg')){
+                            echo $this->Html->image('avatars/'.$indexedFighters[$i][$j]->id.'.jpg',
+                            array(
+                              'width' => 30)
+                            );
+                            } else{ echo $this->Html->image('avatars/default.jpg', array(
+                              'width' => 30)); }
+
+                          echo "</td>";
+                        }
 
                         else
-                        echo "<td class='case'> - </td>";
+                        echo "<td class='case vide'>  </td>";
                     }
 
                     echo '</tr>';

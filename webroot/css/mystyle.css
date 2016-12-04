@@ -54,6 +54,8 @@ a:hover{
   margin-top:30px;
 }
 
+
+
 a.game-title{
   font-family: 'RINGBEARER';
   color:#5b2b06!important;
@@ -115,12 +117,20 @@ a.game-title{
   width:450px;
 }
 
-td.case{
+.case{
   width:30px!important;
   height:30px!important;
   padding:0!important;
   background-color:	#e6e6e6;
   text-align: center;
+}
+
+.vide{
+  background-color:#d9d9d9;
+}
+
+.view{
+  background-color:#f2f2f2;
 }
 
 /****************************************************************************/
