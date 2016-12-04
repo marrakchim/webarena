@@ -16,7 +16,6 @@
         <div class="col-md-12">
           <h2 class="page-title">Send a message</h2>
 
-
             <?php echo $this->Form->create($message, array(
               'inputDefaults' => array(
                 'div' => 'form-group',

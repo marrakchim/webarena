@@ -3,6 +3,11 @@ body{
   font-family: 'roboto-light';
 }
 
+ul{
+  list-style-type: none;
+
+}
+
 nav{
   background-color: #e6e6e6!important;
 }
@@ -54,6 +59,14 @@ a.game-title{
   align-items: center;
   justify-content: space-around;
   padding:20px;
+}
+
+.inline-info-space-between{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:20px;
+  padding-left:0;
 }
 
 .aligned{
@@ -216,13 +229,13 @@ td.case{
 
 @font-face{
 	font-family:'pixeled';
-  src: url('./fonts/pixeled.ttf');
+  src: url('../fonts/pixeled.ttf');
 }
 @font-face{
 	font-family:'roboto-light';
-  src: url('./fonts/Roboto-Light.ttf');
+  src: url('../fonts/Roboto-Light.ttf');
 }
 @font-face{
 	font-family:'RINGBEARER';
-  src: url('./fonts/RINGBEARER.ttf');
+  src: url('../fonts/RINGBEARER.ttf');
 }

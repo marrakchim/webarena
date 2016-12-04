@@ -1,17 +1,46 @@
-<div class="fighters form large-9 medium-8 columns content">
-    <h3>Details of my fighter</h3>
-    
-    <?= $this->Html->link(__('Edit my fighter avatar'), ['action' => 'fighterAvatar', $fighter->id]) ?>
-    
-    <div><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){ echo $this->Html->image('avatars/'.$fighter->id.'.jpg', ['alt' => 'Avatar']); } else{ echo $this->Html->image('avatars/default.jpg', ['alt' => 'Avatar']); } ?></div>
-    
-    <ul>
-        <li><?= $fighter->name ?></li>
-        <li>Level: <?= $this->Number->format($fighter->level) ?></li>
-        <li>XP: <?= $this->Number->format($fighter->xp) ?></li>
-        <li>Sight: <?= $this->Number->format($fighter->skill_sight) ?></li>
-        <li>Strength: <?= $this->Number->format($fighter->skill_strength) ?></li>
-        <li>Life: <?= $this->Number->format($fighter->current_health) . ' / ' . $this->Number->format($fighter->skill_health) ?></li>
-    </ul>
-    
+<div class='container'>
+  <div class='row '>
+    <h1 class='page-header'>Details of my fighter</h1>
+    <div class='inline-info-space-between'>
+        <?
+        echo $this->Html->link(
+            ('Return to fighters'),
+            array('action' => 'fighter'),
+            array('class' => 'button btn btn-info')
+        );
+        ?>
+
+        <?
+        echo $this->Html->link(
+            ("Edit my fighter's avatar"),
+            array('action' => 'fighterAvatar',$fighter->id),
+            array('class' => 'button btn btn-warning')
+        );
+        ?>
+    </div>
+
+    <div class='row col-md-12 well'>
+      <center>
+        <?
+        if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){
+          echo $this->Html->image('avatars/'.$fighter->id.'.jpg',
+          array(
+            'width' => 200)
+          );
+          } else{ echo $this->Html->image('avatars/default.jpg', array(
+            'width' => 200)); }
+        ?>
+
+            <div><?= $fighter->name ?></div>
+            <div>Level: <?= $this->Number->format($fighter->level) ?></div>
+            <div>XP: <?= $this->Number->format($fighter->xp) ?></div>
+            <div>Sight: <?= $this->Number->format($fighter->skill_sight) ?></div>
+            <div>Strength: <?= $this->Number->format($fighter->skill_strength) ?></div>
+            <div>Life: <?= $this->Number->format($fighter->current_health) . ' / ' . $this->Number->format($fighter->skill_health) ?></div>
+
+      <center>
+    </div>
+
+
+  </div>
 </div>
