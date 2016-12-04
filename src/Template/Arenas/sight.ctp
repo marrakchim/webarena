@@ -37,11 +37,19 @@
             <?php foreach ($fightersAround as $fighter): ?>
                 <?php if ($selectedFighter->id != $fighter->id): ?>
                 <ul>
+                    <li><? if(file_exists(WWW_ROOT .'/img/avatars/'.$fighter->id.'.jpg')){
+              echo $this->Html->image('avatars/'.$fighter->id.'.jpg',
+              array(
+                'width' => 50)
+              );
+              } else{ echo $this->Html->image('avatars/default.jpg', array(
+                'width' => 50)); } ?></li>
                     <li><strong><?= $fighter->name ?> (<?= $this->Number->format($fighter->coordinate_x) ?>;<?= $this->Number->format($fighter->coordinate_y) ?>)</strong></li>
                     <li>Level: <?= $this->Number->format($fighter->level) ?></li>
                     <li>XP: <?= $this->Number->format($fighter->xp) ?></li>
                     <li>Strength: <?= $this->Number->format($fighter->skill_strength) ?></li>
                     <li>Life: <?= $this->Number->format($fighter->current_health) . ' / ' . $this->Number->format($fighter->skill_health) ?></li>
+                    <li>Guild: <?= $fighter->guild; ?></li>
                 </ul>
                 <?php endif; ?>
             <?php endforeach; ?>

@@ -351,6 +351,16 @@ class ArenasController  extends AppController
                 if(($visible && $fighter->player_id != $playerId && $fighter->current_health > 0) || ($fighter->id == $fighterSelectedId)){
                     $fightersAround[] = $fighter;
                 }
+                
+                foreach($fightersAround as $fighter){
+                    
+                    if($fighter['guild_id']) {
+                        $guild = $this->Guilds->get($fighter['guild_id']);
+                        $fighter['guild'] = $guild->name;
+                    } else {
+                        $fighter['guild'] = 'No guild';
+                    }
+                }
             }
       }
       else {
