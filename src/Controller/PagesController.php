@@ -37,6 +37,10 @@ class PagesController extends AppController
      */
     public function display()
     {
+        
+        $this->redirect(['controller' => 'arenas', 'action' => 'index']);
+        
+        /*
         $path = func_get_args();
 
         $count = count($path);
@@ -61,5 +65,7 @@ class PagesController extends AppController
             }
             throw new NotFoundException();
         }
+        
+        */
     }
 }

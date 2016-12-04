@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div class='margin-top-20p col-md-4 well'>
+      <div class='col-md-4 well'>
         <center>
           <table class="arrow ">
             <tr>
@@ -78,32 +78,34 @@
       <table class="map table col-md-4 col-md-offset-2">
         <tbody>
 
-          <?php
-          // construit le plateau en vérifiant pour chaque case le tableau indexe
-          for($i=0;$i<15;$i++)
-          {
-            echo '<tr>';
-            for($j=0;$j<10;$j++)
-            {
-                $visible = false;
+            <?php
+                // construit le plateau en vérifiant pour chaque case le tableau indexe
+                for($i=0;$i<15;$i++)
+                {
+                    echo '<tr>';
+                    
+                    for($j=0;$j<10;$j++)
+                    {
+                        $visible = false;
 
-                if(($selectedFighter->coordinate_x - $selectedFighter->skill_sight <= $i && $selectedFighter->coordinate_x + $selectedFighter->skill_sight >= $i && $selectedFighter->coordinate_y == $j)
-                  || ($selectedFighter->coordinate_y - $selectedFighter->skill_sight <= $j && $selectedFighter->coordinate_y + $selectedFighter->skill_sight >= $j && $selectedFighter->coordinate_x == $i)){
-                    $visible = true;
+                        if($selectedFighter->skill_sight >= abs($selectedFighter->coordinate_x - $i) + abs($selectedFighter->coordinate_y - $j)) { $visible = true; }
+
+                        if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id")))
+                        echo "<td class='case'> Y </td>";
+                        
+                        
+                        elseif($visible && !isset($indexedFighters[$i][$j]))
+                        echo "<td class='case'> O </td>";
+                        
+                        elseif($visible && isset($indexedFighters[$i][$j]))
+                        echo "<td class='case'> X </td>";
+                        
+                        else
+                        echo "<td class='case'> - </td>";
+                    }
+                    
+                    echo '</tr>';
                 }
-
-                if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id")))
-                  echo "<td class='case'> Y </td>";
-                elseif(($selectedFighter->coordinate_x - $selectedFighter->skill_sight <= $i && $selectedFighter->coordinate_x + $selectedFighter->skill_sight >= $i && $selectedFighter->coordinate_y == $j && !isset($indexedFighters[$i][$j]))
-                  || ($selectedFighter->coordinate_y - $selectedFighter->skill_sight <= $j && $selectedFighter->coordinate_y + $selectedFighter->skill_sight >= $j && $selectedFighter->coordinate_x == $i && !isset($indexedFighters[$i][$j])))
-                    echo "<td class='case'> O </td>";
-                elseif($visible && isset($indexedFighters[$i][$j]))
-                    echo "<td class='case'> X </td>";
-                else
-                  echo "<td class='case'> - </td>";
-            }
-            echo '</tr>';
-          }
             ?>
 
         </tbody>

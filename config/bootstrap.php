@@ -227,3 +227,5 @@ Plugin::load('Migrations');
 Plugin::load('Flash');
 
 Plugin::load('Flash');
+
+Plugin::load('Flash');

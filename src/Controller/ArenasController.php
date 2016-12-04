@@ -21,6 +21,18 @@ use Cake\Filesystem\Folder;
 */
 class ArenasController  extends AppController
 {
+    
+    function checkConnexion() {
+        
+        $sessionUser = $this->request->session();
+        
+        //User not connected : go to login page
+        if($sessionUser->read("Players.id") == null){
+            $this->Flash->error(__('You have to log in to access to the page.'));
+            return $this->redirect(['controller'=>'arenas', 'action' => 'login']);
+        }
+    }
+    
     public function index()
     {
 
@@ -129,6 +141,8 @@ class ArenasController  extends AppController
 	  }
 
     public function chat(){
+        
+        $this->checkConnexion();
 
         $this->loadModel('Messages');
         $this->loadModel('Fighters');
@@ -153,6 +167,9 @@ class ArenasController  extends AppController
     }
 
     public function newMessage(){
+        
+        $this->checkConnexion();
+        
       $this->loadModel('Fighters');
       $this->loadModel('Messages');
       $message = $this->Messages->newEntity();
@@ -186,6 +203,8 @@ class ArenasController  extends AppController
 
     public function yell()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $this->loadModel('Events');
 
@@ -203,6 +222,8 @@ class ArenasController  extends AppController
 
     public function fighter()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $playerId = $this->request->session()->read('Players.id');
         $fighters = $this->Fighters->find('all')->where(['player_id' => $playerId]);
@@ -216,6 +237,8 @@ class ArenasController  extends AppController
 
     public function fighterAdd()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->newEntity();
 
@@ -237,6 +260,8 @@ class ArenasController  extends AppController
 
     public function fighterView($fighterId)
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
 
@@ -246,6 +271,8 @@ class ArenasController  extends AppController
 
     public function fighterAvatar($fighterId)
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $fighter = $this->Fighters->get($fighterId);
 
@@ -262,7 +289,9 @@ class ArenasController  extends AppController
         $this->set('_serialize', ['fighter']);
     }
 
-    public function fighterSelect($id = null){
+    public function fighterSelect($id = null)
+    {
+        $this->checkConnexion();
 
         if($id != null) {
             $session = $this->request->session();
@@ -279,6 +308,8 @@ class ArenasController  extends AppController
 
     public function sight()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Fighters');
         $this->loadModel('Guilds');
 
@@ -299,8 +330,8 @@ class ArenasController  extends AppController
             foreach ($fighters as $fighter) {
                 $x = $fighter->coordinate_x;
                 $y = $fighter->coordinate_y;
-
-                if(($fighterX + $fighterSight >= $x || $fighterX - $fighterSight <= $x) || ($fighterY + $fighterSight >= $y || $fighterY - $fighterSight <= $y)){
+                
+                if($fighterSight >= abs($fighterX - $x) + abs($fighterY - $y)){
                     $visible = true;
                 }
                 else {
@@ -329,7 +360,10 @@ class ArenasController  extends AppController
 
     }
 
-    public function moveUp(){
+    public function moveUp()
+    {
+        $this->checkConnexion();
+        
       $this->loadModel('Fighters');
       $this->loadModel('Events');
 
@@ -375,7 +409,10 @@ class ArenasController  extends AppController
       return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
 
-    public function moveDown(){
+    public function moveDown()
+    {
+        $this->checkConnexion();
+        
       $this->loadModel('Fighters');
         $this->loadModel('Events');
 
@@ -421,7 +458,10 @@ class ArenasController  extends AppController
       return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
 
-    public function moveLeft(){
+    public function moveLeft()
+    {
+        $this->checkConnexion();
+        
       $this->loadModel('Fighters');
         $this->loadModel('Events');
 
@@ -466,7 +506,10 @@ class ArenasController  extends AppController
       return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
 
-    public function moveRight(){
+    public function moveRight()
+    {
+        $this->checkConnexion();
+        
       $this->loadModel('Fighters');
         $this->loadModel('Events');
 
@@ -529,23 +572,22 @@ class ArenasController  extends AppController
 
     public function diary()
     {
-        //$this->set('Events', $this->Events->find('all'));
+        $this->checkConnexion();
+        
+        $session = $this->request->session();
+        $selectedFighterId = $session->read('FighterSelected.id');
 
-        //$query = $events->find('all');
-
-        /*$event = $this->Event->find('all', array(
-            'conditions' => array(
-                'Event.date BETWEEN NOW() -INTERVAL 1 DAY AND NOW()'),
-            'order' => array('Event.date DESC'), ));*/
-
-        //$this->set('events', $query);
+        $this->loadModel('Fighters');
+        $selectedFighter = $this->Fighters->get($selectedFighterId);
+        
         $this->loadModel('Events');
-        $this->set('events', $this->Events->findLastEvents());
-
+        $this->set('events', $this->Events->findLastEventsInSight($selectedFighter->skill_sight, $selectedFighter->coordinate_x, $selectedFighter->coordinate_y));
     }
 
     public function guild()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Guilds');
         $guilds = $this->Guilds->find('all');
 
@@ -563,6 +605,8 @@ class ArenasController  extends AppController
 
     public function guildView($guildId)
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Guilds');
         $guild = $this->Guilds->get($guildId);
 
@@ -583,7 +627,9 @@ class ArenasController  extends AppController
         $this->set('_serialize', ['fighters']);
     }
 
-    public function guildJoin($guildId = null){
+    public function guildJoin($guildId = null)
+    {
+        $this->checkConnexion();
 
         if($guildId != null) {
 
@@ -599,7 +645,9 @@ class ArenasController  extends AppController
         }
     }
 
-    public function guildQuit($guildId = null){
+    public function guildQuit($guildId = null)
+    {
+        $this->checkConnexion();
 
         if($guildId != null) {
 
@@ -617,6 +665,8 @@ class ArenasController  extends AppController
 
     public function guildCreate()
     {
+        $this->checkConnexion();
+        
         $this->loadModel('Guilds');
         $guildCreate = $this->Guilds->newEntity();
 
