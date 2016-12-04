@@ -17,7 +17,7 @@
           <p><? if($selectedGuild) {echo'Your fighter\'s guild is : '.$selectedGuild->name;
           } else {echo "Your fighter does not have a guild.";} ?></p>
         </div>
-        
+
         <div class="well inline-info">
             <ul>
                 <li>ME</li>
@@ -26,7 +26,7 @@
                 <li>Strength: <?= $this->Number->format($selectedFighter->skill_strength) ?></li>
                 <li>Life: <?= $this->Number->format($selectedFighter->current_health) . ' / ' . $this->Number->format($selectedFighter->skill_health) ?></li>
             </ul>
-            
+
             <?php foreach ($fightersAround as $fighter): ?>
                 <?php if ($selectedFighter->id != $fighter->id): ?>
                 <ul>
@@ -39,7 +39,7 @@
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
-        
+
       </div>
 
       <div class='col-md-4 well'>
@@ -106,7 +106,7 @@
                 for($i=0;$i<15;$i++)
                 {
                     echo '<tr>';
-                    
+
                     for($j=0;$j<10;$j++)
                     {
                         $visible = false;
@@ -115,18 +115,18 @@
 
                         if(isset($indexedFighters[$i][$j]) && ($indexedFighters[$i][$j]->id == $this->request->session()->read("FighterSelected.id")))
                         echo "<td class='case'> Y </td>";
-                        
-                        
+
+
                         elseif($visible && !isset($indexedFighters[$i][$j]))
                         echo "<td class='case'> O </td>";
-                        
+
                         elseif($visible && isset($indexedFighters[$i][$j]))
                         echo "<td class='case'> X </td>";
-                        
+
                         else
                         echo "<td class='case'> - </td>";
                     }
-                    
+
                     echo '</tr>';
                 }
             ?>

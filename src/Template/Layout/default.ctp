@@ -115,7 +115,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <div class="container clearfix">
         <?= $this->fetch('content') ?>
     </div>
-    <footer>
+    <footer class="inline-info-space-between">
+      <div class='margin-30px'>
+        Malek Marrakchi - Simon Lazzari - Billal Hatoum - Chloé Riou
+      </div>
+      <div>
+        ECE Paris - Dec 2016
+      </div>
     </footer>
 </body>
 </html>
