@@ -127,6 +127,10 @@ a.game-title{
   vertical-align: middle !important;
 }
 
+td{
+  padding:0;
+}
+
 .vide{
   background-color:#d9d9d9;
 }
