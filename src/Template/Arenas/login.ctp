@@ -1,41 +1,42 @@
 
+
+
       <div class="content-wrapper">
         <div class="container-fluid">
 
           <div class="row" id='container-login'>
-            <div class="col-md-12 well">
+            <div class="col-md-12 ">
               <h2 class="page-title">Log in</h2>
-              <?= $this->Form->create(null,['name' => 'Login']) ?>
 
-              <div class="">
 
-                <div class="row" >
-                  <div class="col-md-9 col-md-offset-2">
-                    <? echo $this->Form->input('email', array('required'=>'true','placeholder'=>'example@gmail.com','type' => 'email', 'class' => 'form-control mb padding-10px margin-10px' ));;?>
-                  </div>
+                  <?php echo $this->Form->create('Login', array(
+                  	'inputDefaults' => array(
+                  		'div' => 'form-group',
+                  		'wrapInput' => 'col col-md-9',
+                  		'class' => 'form-control col col-md-3 control-label'
+                  	),
+                  	'class' => 'well form-horizontal'
+                  )); ?>
+                	<?php echo $this->Form->input('email', array(
+                		'required'=>'true','placeholder'=>'example@gmail.com','type' => 'email', 'class' => 'form-control mb padding-10px margin-10px'
+                	)); ?>
+                	<?php echo $this->Form->input('password', array(
+                		'required'=>'true','label'=>'Password','placeholder'=>'Password','type' => 'password', 'class' => 'form-control mb padding-10px margin-10px'
+                	)); ?>
 
-                  <div class="col-md-9 col-md-offset-2">
-                    <? echo $this->Form->input('password', array('required'=>'true','label'=>'Password','placeholder'=>'Password','type' => 'password', 'class' => 'form-control mb padding-10px margin-10px' ));?>
-                  </div>
-                </div>
-
-                <div class="col-md-offset-2">
-
-                  <? echo $this->Form->button('Log In', array(
+                	<div class="form-group">
+                		<?php echo $this->Form->submit('Sign in', array(
                       'type' => 'button',
-                      'class' => 'btn btn-default margin-10px'
-                      ));
-                  ?>
+                			'class' => 'btn btn-default margin-10px'
+                		)); ?>
+                	</div>
+                <?php echo $this->Form->end(); ?>
 
-                </div>
 
-              <?= $this->Form->end() ?>
 
-            </div>
 
             </div>
           </div>
-
 
           <? echo $this->Form->button('Forgot your password ?', array(
               'type' => 'button',
@@ -78,6 +79,9 @@
           </div>
         </div>
       </div>
+
+
+
 
 <script>
 
