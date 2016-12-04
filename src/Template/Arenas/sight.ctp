@@ -1,6 +1,3 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-
-</nav>
 <div class="fighters col-md-6 ">
   <div class='container'>
     <div class='row'>

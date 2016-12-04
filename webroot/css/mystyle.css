@@ -39,6 +39,10 @@ a:hover{
   margin-left: 15px;
 }
 
+.margin-top-30px{
+  margin-top:30px;
+}
+
 a.game-title{
   font-family: 'RINGBEARER';
   color:#5b2b06!important;
