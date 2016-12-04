@@ -49,26 +49,24 @@
 
                       <div class="mb-3x mt-2x text-justify">
 
-
-                        <?php echo $this->Form->create('ForgetPass', array(
+                        <?php echo $this->Form->create('Log In', array(
                           'inputDefaults' => array(
                             'div' => 'form-group',
                             'wrapInput' => 'col col-md-9',
-                            'class' => 'form-control col col-md-3 control-label'
+                            'class' => 'form-control'
                           ),
                           'class' => 'well form-horizontal'
                         )); ?>
-                        <?php echo $this->Form->input('email', array(
-                          'required'=>'true','placeholder'=>'example@gmail.com','label'=>'Type your email address','type' => 'email', 'class' => 'form-control mb padding-10px margin-10px'
-                        )); ?>
-
-
-                        <div class="form-group">
-                          <?php echo $this->Form->submit('Send password', array(
-                            'type' => 'button',
-                            'class' => 'btn btn-default margin-top-left-15px'
+                          <?php echo $this->Form->input('email', array(
+                            'placeholder' => 'Email','class' => 'form-control'
                           )); ?>
-                        </div>
+
+                          <div class="form-group">
+                            <?php echo $this->Form->submit('Log in', array(
+                              'div' => 'col col-md-9 col-md-offset-3',
+                              'class' => 'btn btn-default margin-top-left-15px'
+                            )); ?>
+                          </div>
                         <?php echo $this->Form->end(); ?>
 
                         <? echo $this->Form->button('Close', array(

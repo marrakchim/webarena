@@ -69,9 +69,6 @@ class ArenasController  extends AppController
 
         }
     }
-
-    $this->Flash->error(__('what'));
-
     }
 
     public function login()
