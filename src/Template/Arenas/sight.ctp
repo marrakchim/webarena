@@ -1,9 +1,9 @@
 <div class="fighters col-md-6 ">
   <div class='container'>
     <div class='row'>
-        <h2 class='page-header'>ARENA</h2>
+        <h1 class='page-header'>ARENA</h1>
         
-        <h3>My Fighter</h3>
+        <h2>My Fighter</h2>
 
         <div class='well inline-info'>
           <p>
@@ -30,7 +30,7 @@
           
         </div>
         
-        <h3>Players around</h3>
+        <h2>Players around</h2>
         
         <div class="well inline-info">
 
