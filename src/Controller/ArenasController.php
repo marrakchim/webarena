@@ -360,198 +360,111 @@ class ArenasController  extends AppController
 
     }
 
-    public function moveUp()
+    public function move($type)
     {
         $this->checkConnexion();
-        
-      $this->loadModel('Fighters');
-      $this->loadModel('Events');
 
-      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x - 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
-      if(isset($canIGo)){
-        $randomValue = rand(1,20);
-        $calculation = 10 + $canIGo->level - $myFighter->level ;
-        if($randomValue > $calculation){
-          $canIGo->current_health = $canIGo->current_health - $myFighter->skill_strength ;
-          $this->Fighters->save($canIGo);
-          if($canIGo->current_health <= 0){
-            $this->Fighters->delete($canIGo);
-            $myFighter->xp = $myFighter->xp + $canIGo->level;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-
-            $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-          else {
-            $myFighter->xp = $myFighter->xp + 1;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Hit !'));
-
-              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-        }
-        else {
-            $this->Flash->error(__('Fail !'));
-            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
-        }
-      }
-      if(!isset($canIGo) && ($myFighter->coordinate_x-1) >= 0){
-        $myFighter->coordinate_x = $myFighter->coordinate_x - 1 ;
-        $this->Fighters->save($myFighter);
-        $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
-      }
-      elseif(($myFighter->coordinate_x-1) <= 0) {
-        $this->Flash->error(__('You are not allowed to go there.'));
-      }
-
-      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
-    }
-
-    public function moveDown()
-    {
-        $this->checkConnexion();
-        
-      $this->loadModel('Fighters');
+        $this->loadModel('Fighters');
         $this->loadModel('Events');
+        $this->loadModel('Messages');
 
-      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x + 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
-      if(isset($canIGo)){
-        $randomValue = rand(1,20);
-        $calculation = 10 + $canIGo->level - $myFighter->level ;
-        if($randomValue > $calculation){
-          $canIGo->current_health = $canIGo->current_health - $myFighter->skill_strength ;
-          $this->Fighters->save($canIGo);
-          if($canIGo->current_health <= 0){
-            $this->Fighters->delete($canIGo);
-            $myFighter->xp = $myFighter->xp + $canIGo->level;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-
-              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-          else {
-            $myFighter->xp = $myFighter->xp + 1;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Hit !'));
-
-              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-        }
-        else {
-          $this->Flash->error(__('Fail !'));
-            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
-        }
-      }
-      if(!isset($canIGo) && ($myFighter->coordinate_x+1) <= 14){
-        $myFighter->coordinate_x = $myFighter->coordinate_x + 1 ;
-        $this->Fighters->save($myFighter);
-        $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
-      }
-      elseif(($myFighter->coordinate_x+1) >= 14) {
-        $this->Flash->error(__('You are not allowed to go there.'));
-      }
-
-      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
-    }
-
-    public function moveLeft()
-    {
-        $this->checkConnexion();
+        $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
+        $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
         
-      $this->loadModel('Fighters');
-        $this->loadModel('Events');
-
-      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y - 1])->first();
-      if(isset($canIGo)){
-        $randomValue = rand(1,20);
-        $calculation = 10 + $canIGo->level - $myFighter->level ;
-        if($randomValue > $calculation){
-          $canIGo->current_health = $canIGo->current_health - $myFighter->skill_strength ;
-          $this->Fighters->save($canIGo);
-          if($canIGo->current_health <= 0){
-            $this->Fighters->delete($canIGo);
-            $myFighter->xp = $myFighter->xp + $canIGo->level;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
-
-              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-          else {
-            $myFighter->xp = $myFighter->xp + 1;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Hit !'));
-
-              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-        }
-        else {
-          $this->Flash->error(__('Fail !'));
-            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
-        }
-      }
-      if(!isset($canIGo) && ($myFighter->coordinate_y-1) >= 0){
-        $myFighter->coordinate_y = $myFighter->coordinate_y - 1 ;
-        $this->Fighters->save($myFighter);
-        $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
-      }
-      elseif(($myFighter->coordinate_y-1) <= 0) {
-        $this->Flash->error(__('You are not allowed to go there.'));
-      }
-      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
-    }
-
-    public function moveRight()
-    {
-        $this->checkConnexion();
         
-      $this->loadModel('Fighters');
-        $this->loadModel('Events');
+        //Check if ennemy on asked move
+        switch($type)
+        {
+            case 'up' : $ennemy = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x - 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
+            break;
 
-      $fighterSelectedId = $this->request->session()->read('FighterSelected.id');
-      $myFighter = $this->Fighters->find()->where(['id' => $fighterSelectedId])->first();
-      $canIGo = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y + 1])->first();
-      if(isset($canIGo)){
-        $randomValue = rand(1,20);
-        $calculation = 10 + $canIGo->level - $myFighter->level ;
-        if($randomValue > $calculation){
-          $canIGo->current_health = $canIGo->current_health - $myFighter->skill_strength ;
-          $this->Fighters->save($canIGo);
-          if($canIGo->current_health <= 0){
-            $this->Fighters->delete($canIGo);
-            $myFighter->xp = $myFighter->xp + $canIGo->level;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Congratulations you have killed : '. $canIGo->name .' !'));
+            case 'down' : $ennemy = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x + 1, 'coordinate_y' => $myFighter->coordinate_y])->first();
+            break;
 
-              $this->Events->addNewEvent($myFighter->name.' killed '.$canIGo->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
-          else {
-            $myFighter->xp = $myFighter->xp + 1;
-            $this->Fighters->save($myFighter);
-            $this->Flash->success(__('Hit !'));
+            case 'left' : $ennemy = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y - 1])->first();
+            break;
 
-              $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
-          }
+            case 'right' : $ennemy = $this->Fighters->find()->where(['coordinate_x' => $myFighter->coordinate_x, 'coordinate_y' => $myFighter->coordinate_y + 1])->first();
+            break;  
         }
+        
+        //If it is one of my fighters
+        if(isset($ennemy)){
+            if($ennemy->player_id == $this->request->session()->read('Players.id')) {
+                $ennemy = null;
+            }
+        }
+        
+        //If there is an ennemy
+        if(isset($ennemy)){
+            
+            $randomValue = rand(1,20);
+            $calculation = 10 + $ennemy->level - $myFighter->level;
+            
+            //Successfull attack
+            if($randomValue > $calculation){
+                
+                //Update ennemy health
+                $ennemy->current_health = $ennemy->current_health - $myFighter->skill_strength ;
+                $this->Fighters->save($ennemy);
+                
+                if($ennemy->current_health <= 0){
+                    
+                    $this->Messages->deleteFighterMessages($ennemy->id);
+                    $this->Fighters->delete($ennemy);
+                    
+                    //Successful attack and kill : +ennemylevel xp
+                    $myFighter->xp = $myFighter->xp + $ennemy->level;
+                    $this->Fighters->save($myFighter);
+                    
+                    $this->Flash->success(__('Congratulations you have killed : '. $ennemy->name .' !'));
+
+                    $this->Events->addNewEvent($myFighter->name.' killed '.$ennemy->name, $myFighter->coordinate_x, $myFighter->coordinate_y);
+                }
+                else {
+                    
+                    //Successful attack but no kill : +1 xp
+                    $myFighter->xp = $myFighter->xp + 1;
+                    $this->Fighters->save($myFighter);
+                    
+                    $this->Flash->success(__('You attacked '.$ennemy->name.' and hit him !'));
+                    $this->Events->addNewEvent($myFighter->name.' attacks '.$ennemy->name.' and hits', $myFighter->coordinate_x, $myFighter->coordinate_y);
+                }
+            }
+            else {
+            
+                $this->Flash->error(__('You attacked '.$ennemy->name.' but failed !'));
+                $this->Events->addNewEvent($myFighter->name.' attacks '.$ennemy->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
+            }
+        }
+        //If there is no ennemy
         else {
-          $this->Flash->error(__('Fail !'));
-            $this->Events->addNewEvent($myFighter->name.' attacks '.$canIGo->name.' and fails', $myFighter->coordinate_x, $myFighter->coordinate_y);
+            
+            $move = false;
+            
+            if( $type == 'up' && ($myFighter->coordinate_x-1) >= 0 ) {
+                $myFighter->coordinate_x = $myFighter->coordinate_x - 1 ;
+                $move = true;
+            }elseif( $type == 'down' && ($myFighter->coordinate_x+1) <= 14 ) {
+                $myFighter->coordinate_x = $myFighter->coordinate_x + 1 ;
+                $move = true;
+            }elseif( $type == 'left' && ($myFighter->coordinate_y-1) >= 0 ) {
+                $myFighter->coordinate_y = $myFighter->coordinate_y - 1 ;
+                $move = true;
+            }elseif( $type == 'right' && ($myFighter->coordinate_y+1) <= 9 ) {
+                $myFighter->coordinate_y = $myFighter->coordinate_y + 1 ;
+                $move = true;
+            }
+            
+            if($move) {
+                $this->Fighters->save($myFighter);
+                $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
+            } else {
+                $this->Flash->error(__('You are not allowed to go there.'));
+            } 
         }
-      }
-      elseif(!isset($canIGo) && ($myFighter->coordinate_y+1) <= 9){
-        $myFighter->coordinate_y = $myFighter->coordinate_y + 1 ;
-        $this->Fighters->save($myFighter);
-        $this->Flash->success(__('You moved. Your new coordinates are ('.$myFighter->coordinate_x.','.$myFighter->coordinate_y.').'));
-      }
-      elseif(($myFighter->coordinate_y+1) >= 9) {
-        $this->Flash->error(__('You are not allowed to go there.'));
-      }
-      return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+
+        return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
     }
 
     /*public function hit($fighter){
